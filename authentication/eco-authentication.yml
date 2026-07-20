@@ -1,0 +1,28 @@
+generated: '2026-07-19'
+method: searched
+source: https://docs.eco.com/api-reference/introduction
+docs: https://docs.eco.com/api-reference/introduction
+summary:
+  types: [none]
+  api_key_in: []
+  oauth2_flows: []
+  model: no-auth-with-attribution
+description: >-
+  The Eco Routes REST API (quote and intent endpoints) requires NO authentication.
+  There are no securitySchemes declared in the OpenAPI and no API keys, tokens, or
+  OAuth flows. Callers pass a dAppID identifier in the request body purely for
+  attribution. Authorization instead lives at the onchain layer: solver
+  registration/update uses signed requests, and all value movement is executed via
+  EVM/SVM wallet signatures against non-custodial per-intent CREATE2 vault
+  contracts. There is no account or credential provisioning surface.
+schemes: []
+onchain_authorization:
+  - mechanism: dAppID
+    location: request body
+    purpose: attribution only (not access control)
+  - mechanism: signed solver requests
+    purpose: solver registration and quote submission
+  - mechanism: wallet signatures (EVM / SVM)
+    purpose: authorizing intent funding and settlement against vault contracts
+  - mechanism: Permit3 / Permit2
+    purpose: bounded token approvals and gasless intent authorization
