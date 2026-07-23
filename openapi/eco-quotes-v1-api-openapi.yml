@@ -1,0 +1,227 @@
+openapi: 3.0.0
+info:
+  title: Eco Routes Quotes V1 API
+  description: Eco Routes API documentation
+  version: '1.0'
+  contact: {}
+servers:
+- url: https://quotes.eco.com
+  description: Production
+- url: https://quotes-preprod.eco.com
+  description: Preproduction
+- url: https://quotes.staging.eco.com
+  description: Staging
+- url: http://localhost:3000
+  description: Local
+tags:
+- name: Quotes V1
+paths:
+  /api/v1/quotes:
+    post:
+      operationId: V1QuotesController_getQuotes
+      summary: Get Quotes
+      description: Retrieve quotes from solvers for a given intent. Returns an array of quotes with pricing and execution details from available solvers.
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/V1GetQuotesDTO'
+      responses:
+        '200':
+          description: Successfully retrieved quotes from solvers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V1GetQuotesResponseDTO'
+      tags:
+      - Quotes V1
+  /api/v1/quotes/reverse:
+    post:
+      operationId: V1QuotesController_getReverseQuote
+      summary: Get Reverse Quotes
+      description: Retrieve reverse quotes from solvers for a given intent. Reverse quotes allow you to specify what you want to offer and get quotes for what will be received and can only have transfer calls.
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/V1GetQuotesDTO'
+      responses:
+        '200':
+          description: Successfully retrieved reverse quotes from solvers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V1GetQuotesResponseDTO'
+      tags:
+      - Quotes V1
+components:
+  schemas:
+    V1GetQuotesResponseDTO:
+      type: object
+      properties:
+        data:
+          description: Array of quote responses from solvers for the v1 quotes endpoint
+          type: array
+          items:
+            $ref: '#/components/schemas/V1QuoteResponseDTO'
+      required:
+      - data
+    V1GetQuotesDTO:
+      type: object
+      properties:
+        dAppID:
+          type: string
+          description: Unique identifier for the dApp making the quote request
+          example: my-dapp
+        intentData:
+          description: Intent data containing route and reward information for the quote request
+          allOf:
+          - $ref: '#/components/schemas/V1IntentDataDTO'
+      required:
+      - dAppID
+      - intentData
+    RouteDataDTO:
+      type: object
+      properties:
+        originChainID:
+          type: string
+          description: Chain ID where the intent originates
+          example: '8453'
+        destinationChainID:
+          type: string
+          description: Chain ID where the intent will be executed
+          example: '10'
+        inboxContract:
+          type: string
+          description: Address of the inbox contract on the destination chain
+          example: '0x123abc456def789012345678901234567890abcd'
+        tokens:
+          description: Array of ERC20 tokens and amounts involved in the destination calls
+          type: array
+          items:
+            $ref: '#/components/schemas/TokenAmountDataDTO'
+        calls:
+          description: Array of contract calls to be executed on the destination chain
+          type: array
+          items:
+            $ref: '#/components/schemas/CallDataDTO'
+        salt:
+          type: string
+          description: Salt for the intent (used when initiating gasless intents or publishing onchain, set to '0x0' for quote requests)
+          example: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef'
+      required:
+      - originChainID
+      - destinationChainID
+      - inboxContract
+      - tokens
+      - calls
+    TokenAmountDataDTO:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Address of the ERC20 token contract
+          example: '0xA0b86a33E6441446C1c3df4c64B739C7e4a81ec0'
+        amount:
+          type: string
+          description: Token amount in smallest unit (wei for ETH, base units for ERC20 tokens)
+          example: '1000000'
+      required:
+      - token
+      - amount
+    V1QuoteResponseDTO:
+      type: object
+      properties:
+        quoteData:
+          description: Quote data containing the pricing and execution details for this quote
+          allOf:
+          - $ref: '#/components/schemas/V1QuoteDataDTO'
+      required:
+      - quoteData
+    V1QuoteDataDTO:
+      type: object
+      properties:
+        tokens:
+          description: Array of ERC20 tokens and amounts required for this quote
+          type: array
+          items:
+            $ref: '#/components/schemas/TokenAmountDataDTO'
+        nativeValue:
+          type: string
+          description: Native token value required for this quote (in wei)
+          example: '0'
+        expiryTime:
+          type: string
+          description: Unix timestamp when this quote expires
+          example: '1699123456'
+        estimatedFulfillTimeSec:
+          type: number
+          description: Estimated time in seconds for the intent to be fulfilled after submission
+          example: 30
+      required:
+      - tokens
+      - expiryTime
+      - estimatedFulfillTimeSec
+    RewardDataDTO:
+      type: object
+      properties:
+        creator:
+          type: string
+          description: Address of the user creating this intent, this will be the recipient of a refund if the intent expires
+          example: '0x742d35Cc6634C0532925a3b8D56C85e83F9D18Fa'
+        proverContract:
+          type: string
+          description: Address of the prover contract that validates intent execution
+          example: '0x1234567890abcdef1234567890abcdef12345678'
+        deadline:
+          type: string
+          description: Unix timestamp deadline for when this intent expires (in seconds)
+          example: '1699123456'
+        nativeValue:
+          type: string
+          description: Native token amount offered (in wei)
+          example: '0'
+        tokens:
+          description: Array of ERC20 tokens and amounts offered on the origin chain for fulfilling the intent
+          type: array
+          items:
+            $ref: '#/components/schemas/TokenAmountDataDTO'
+      required:
+      - creator
+      - proverContract
+      - deadline
+      - nativeValue
+      - tokens
+    CallDataDTO:
+      type: object
+      properties:
+        target:
+          type: string
+          description: Address of the contract to call or recipient for native token transfers
+          example: '0x742d35Cc6634C0532925a3b8D56C85e83F9D18Fa'
+        data:
+          type: string
+          description: Encoded function call data or empty for native token transfers
+          example: '0xa9059cbb000000000000000000000000742d35cc6634c0532925a3b8d56c85e83f9d18fa0000000000000000000000000000000000000000000000000000000000989680'
+        value:
+          type: string
+          description: Native token value to send with the call (in wei)
+          example: '0'
+      required:
+      - target
+      - data
+      - value
+    V1IntentDataDTO:
+      type: object
+      properties:
+        routeData:
+          $ref: '#/components/schemas/RouteDataDTO'
+        rewardData:
+          $ref: '#/components/schemas/RewardDataDTO'
+      required:
+      - routeData
+      - rewardData

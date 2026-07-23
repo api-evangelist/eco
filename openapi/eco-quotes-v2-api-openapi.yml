@@ -1,0 +1,535 @@
+openapi: 3.0.0
+info:
+  title: Eco Routes Quotes V1 Quotes V2 API
+  description: Eco Routes API documentation
+  version: '1.0'
+  contact: {}
+servers:
+- url: https://quotes.eco.com
+  description: Production
+- url: https://quotes-preprod.eco.com
+  description: Preproduction
+- url: https://quotes.staging.eco.com
+  description: Staging
+- url: http://localhost:3000
+  description: Local
+tags:
+- name: Quotes V2
+paths:
+  /api/v2/quotes:
+    post:
+      operationId: QuotesController_getQuotes
+      summary: Get Quotes
+      description: Retrieve quotes from solvers for a given intent. Returns an array of quotes with pricing and execution details from available solvers.
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetQuotesDTO'
+      responses:
+        '201':
+          description: Successfully retrieved quotes from solvers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EcoAPIResponse'
+      tags:
+      - Quotes V2
+  /api/v2/quotes/reverse:
+    post:
+      operationId: QuotesController_getReverseQuote
+      summary: Get Reverse Quotes
+      description: Retrieve reverse quotes from solvers for a given intent. Reverse quotes allow you to specify what you want to offer and get quotes for what will be received and can only have transfer calls.
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetQuotesDTO'
+      responses:
+        '201':
+          description: Successfully retrieved reverse quotes from solvers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EcoAPIResponse'
+      tags:
+      - Quotes V2
+  /api/v2/quotes/initiateGaslessIntent:
+    post:
+      operationId: QuotesController_initiateGaslessIntent
+      summary: Initiate Gasless Intent
+      description: Submit a gasless intent transaction using a previously obtained quote. This endpoint initiates the gasless execution of an intent with the specified solver.
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InitiateGaslessIntentDTO'
+      responses:
+        '201':
+          description: Successfully initiated gasless intent transaction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EcoAPIResponse'
+      tags:
+      - Quotes V2
+  /api/v2/quotes/getGaslessIntentTransactionData:
+    post:
+      operationId: QuotesController_getDestinationChainTransactionHash
+      summary: Get Gasless Intent Transaction Data
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GaslessIntentTransactionDataRequestDTO'
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GaslessIntentTransactionDataDTO'
+      tags:
+      - Quotes V2
+components:
+  schemas:
+    GaslessIntentDataDTO:
+      type: object
+      properties:
+        permitData:
+          description: Optional permit data for token approvals (permit, permit2, or permit3)
+          allOf:
+          - $ref: '#/components/schemas/PermitDataDTO'
+        allowPartial:
+          type: boolean
+          description: Whether to allow partial funding of the intent
+          example: false
+          default: false
+    PermitDataDTO:
+      type: object
+      properties:
+        permit:
+          description: Array of ERC20 permit signatures for token approvals
+          type: array
+          items:
+            $ref: '#/components/schemas/PermitDTO'
+        permit2:
+          description: Permit2 signature data for universal token approvals
+          type: array
+          items:
+            $ref: '#/components/schemas/Permit2DTO'
+        permit3:
+          description: Permit3 signature data for multi-chain token approvals
+          allOf:
+          - $ref: '#/components/schemas/Permit3DTO'
+    PermitDTO:
+      type: object
+      properties:
+        chainID:
+          type: number
+        funder:
+          type: string
+        spender:
+          type: string
+          description: Address authorized to spend the approved tokens
+          example: '0x742d35Cc6634C0532925a3b8D56C85e83F9D18Fa'
+        token:
+          type: string
+          description: ERC20 token contract address that supports permit functionality
+          example: '0xA0b86a33E6441446C1c3df4c64B739C7e4a81ec0'
+        signature:
+          type: string
+          description: ERC20 permit signature
+          example: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1b'
+        deadline:
+          type: string
+          description: Unix timestamp deadline for when the permit expires (in seconds)
+          example: '1699123456'
+        value:
+          type: string
+      required:
+      - chainID
+      - funder
+      - spender
+      - token
+      - signature
+      - deadline
+      - value
+    Permit3DTO:
+      type: object
+      properties:
+        chainId:
+          type: number
+          description: The original chain ID from the signature
+          example: 1
+        permitContract:
+          type: string
+          description: Address of the Permit3 contract
+          example: '0x1234567890123456789012345678901234567890'
+        owner:
+          type: string
+          description: Owner address of the tokens being permitted
+          example: '0x0987654321098765432109876543210987654321'
+        salt:
+          type: string
+          description: Unique salt value for the permit signature
+          example: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef'
+        signature:
+          type: string
+          description: Cryptographic signature for the permit
+          example: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1b'
+        deadline:
+          type: string
+          description: Expiration timestamp for the permit signature
+          example: '1234567890'
+        timestamp:
+          type: number
+          description: Unix timestamp when the permit was created
+          example: 1234567890
+        merkleRoot:
+          type: string
+          description: Merkle root hash representing all chain permit leaves
+          example: '0xabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcd'
+        leaves:
+          description: Array of merkle tree leaf hashes for multi-chain permits
+          example:
+          - '0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890ab'
+          - '0xfedcba0987654321fedcba0987654321fedcba0987654321fedcba0987654321'
+          type: array
+          items:
+            type: string
+        allowanceOrTransfers:
+          description: Array of allowance or transfer data organized by chain for multi-chain permits
+          type: array
+          items:
+            $ref: '#/components/schemas/AllowanceOrTransferDTO'
+      required:
+      - chainId
+      - permitContract
+      - owner
+      - salt
+      - signature
+      - deadline
+      - timestamp
+      - merkleRoot
+      - leaves
+      - allowanceOrTransfers
+    RouteDataDTO:
+      type: object
+      properties:
+        originChainID:
+          type: string
+          description: Chain ID where the intent originates
+          example: '8453'
+        destinationChainID:
+          type: string
+          description: Chain ID where the intent will be executed
+          example: '10'
+        inboxContract:
+          type: string
+          description: Address of the inbox contract on the destination chain
+          example: '0x123abc456def789012345678901234567890abcd'
+        tokens:
+          description: Array of ERC20 tokens and amounts involved in the destination calls
+          type: array
+          items:
+            $ref: '#/components/schemas/TokenAmountDataDTO'
+        calls:
+          description: Array of contract calls to be executed on the destination chain
+          type: array
+          items:
+            $ref: '#/components/schemas/CallDataDTO'
+        salt:
+          type: string
+          description: Salt for the intent (used when initiating gasless intents or publishing onchain, set to '0x0' for quote requests)
+          example: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef'
+      required:
+      - originChainID
+      - destinationChainID
+      - inboxContract
+      - tokens
+      - calls
+    Permit2DTO:
+      type: object
+      properties:
+        chainID:
+          type: number
+        permitContract:
+          type: string
+          description: Address of the Permit2 contract for universal token approvals
+          example: '0x000000000022D473030F116dDEE9F6B43aC78BA3'
+        details:
+          description: Array of token details and amounts being approved
+          type: array
+          items:
+            $ref: '#/components/schemas/Permit2TypedDataDetailsDTO'
+        funder:
+          type: string
+        spender:
+          type: string
+          description: Address authorized to spend the approved tokens
+          example: '0x742d35Cc6634C0532925a3b8D56C85e83F9D18Fa'
+        sigDeadline:
+          type: string
+          description: Unix timestamp deadline for when the permit expires (in seconds)
+          example: '1699123456'
+        signature:
+          type: string
+          description: Permit2 signature for the approval data
+          example: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1b'
+      required:
+      - chainID
+      - permitContract
+      - details
+      - funder
+      - spender
+      - sigDeadline
+      - signature
+    AllowanceOrTransferDTO:
+      type: object
+      properties:
+        chainID:
+          type: number
+          description: The chain ID where the allowance or transfer occurs
+          example: 1
+        modeOrExpiration:
+          type: number
+          description: Mode for allowance (0) or expiration timestamp for transfer
+          example: 0
+        tokenKey:
+          type: string
+          description: Token contract address
+          example: '0xA0b86a33E6441B8Ec2c8C7E5b0d77D5FdDa0c4E4'
+        account:
+          type: string
+          description: Account address for the allowance or transfer
+          example: '0x742d35cc6634c0532925a3b8b0eff6a2db3b51a'
+        amountDelta:
+          type: string
+          description: Amount delta for the allowance or transfer (in wei)
+          example: '1000000000000000000'
+      required:
+      - chainID
+      - modeOrExpiration
+      - tokenKey
+      - account
+      - amountDelta
+    InitiateGaslessIntentDTO:
+      type: object
+      properties:
+        intentGroupID:
+          type: string
+          description: Unique identifier of the group of intents being used
+          example: group:01234567-89ab-cdef-0123-456789abcdef
+        dAppID:
+          type: string
+          description: Identifier for the client application initiating the gasless intent
+          example: my-dapp
+        intentEntries:
+          description: Array of intent request entries
+          type: array
+          items:
+            $ref: '#/components/schemas/GaslessIntentRequestIntentEntryDTO'
+        gaslessIntentData:
+          description: Gasless intent configuration containing permit signatures and execution parameters
+          allOf:
+          - $ref: '#/components/schemas/GaslessIntentDataDTO'
+      required:
+      - intentGroupID
+      - dAppID
+      - intentEntries
+      - gaslessIntentData
+    TokenAmountDataDTO:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Address of the ERC20 token contract
+          example: '0xA0b86a33E6441446C1c3df4c64B739C7e4a81ec0'
+        amount:
+          type: string
+          description: Token amount in smallest unit (wei for ETH, base units for ERC20 tokens)
+          example: '1000000'
+      required:
+      - token
+      - amount
+    Permit2TypedDataDetailsDTO:
+      type: object
+      properties:
+        token:
+          type: string
+          description: ERC20 token contract address being approved
+          example: '0xA0b86a33E6441446C1c3df4c64B739C7e4a81ec0'
+        amount:
+          type: string
+          description: Amount to approve (in base units)
+          example: '1000000000'
+        expiration:
+          type: string
+          description: Unix timestamp when the permit expires (in seconds)
+          example: '1699123456'
+        nonce:
+          type: string
+          description: Unique nonce for the permit to prevent replay attacks
+          example: '42'
+      required:
+      - token
+      - amount
+      - expiration
+      - nonce
+    GaslessIntentTransactionDataDTO:
+      type: object
+      properties:
+        intentGroupID:
+          type: string
+          description: Unique identifier of the intent group
+          example: group:01234567-89ab-cdef-0123-456789abcdef
+        destinationChainID:
+          type: number
+          description: Destination chain ID where the intent was executed
+          example: 137
+        destinationChainTxHash:
+          type: string
+          description: Transaction hash on the destination chain
+          example: '0xfedcba0987654321fedcba0987654321fedcba0987654321fedcba0987654321'
+      required:
+      - intentGroupID
+    EcoAPIResponse:
+      type: object
+      properties: {}
+    RewardDataDTO:
+      type: object
+      properties:
+        creator:
+          type: string
+          description: Address of the user creating this intent, this will be the recipient of a refund if the intent expires
+          example: '0x742d35Cc6634C0532925a3b8D56C85e83F9D18Fa'
+        proverContract:
+          type: string
+          description: Address of the prover contract that validates intent execution
+          example: '0x1234567890abcdef1234567890abcdef12345678'
+        deadline:
+          type: string
+          description: Unix timestamp deadline for when this intent expires (in seconds)
+          example: '1699123456'
+        nativeValue:
+          type: string
+          description: Native token amount offered (in wei)
+          example: '0'
+        tokens:
+          description: Array of ERC20 tokens and amounts offered on the origin chain for fulfilling the intent
+          type: array
+          items:
+            $ref: '#/components/schemas/TokenAmountDataDTO'
+      required:
+      - creator
+      - proverContract
+      - deadline
+      - nativeValue
+      - tokens
+    GaslessIntentTransactionDataRequestDTO:
+      type: object
+      properties:
+        intentGroupID:
+          type: string
+          description: Unique identifier of the intent group to query transaction data for
+          example: group:01234567-89ab-cdef-0123-456789abcdef
+      required:
+      - intentGroupID
+    CallDataDTO:
+      type: object
+      properties:
+        target:
+          type: string
+          description: Address of the contract to call or recipient for native token transfers
+          example: '0x742d35Cc6634C0532925a3b8D56C85e83F9D18Fa'
+        data:
+          type: string
+          description: Encoded function call data or empty for native token transfers
+          example: '0xa9059cbb000000000000000000000000742d35cc6634c0532925a3b8d56c85e83f9d18fa0000000000000000000000000000000000000000000000000000000000989680'
+        value:
+          type: string
+          description: Native token value to send with the call (in wei)
+          example: '0'
+      required:
+      - target
+      - data
+      - value
+    IntentDataDTO:
+      type: object
+      properties:
+        routeData:
+          description: Route configuration specifying source and destination chains and transfer details
+          allOf:
+          - $ref: '#/components/schemas/RouteDataDTO'
+        rewardData:
+          description: Reward configuration defining tokens and amounts offered to solvers for executing the intent
+          allOf:
+          - $ref: '#/components/schemas/RewardDataDTO'
+        gaslessIntentData:
+          description: Optional gasless intent data containing permit signatures for token approvals and execution configuration
+          allOf:
+          - $ref: '#/components/schemas/GaslessIntentDataDTO'
+      required:
+      - routeData
+      - rewardData
+    GetQuotesDTO:
+      type: object
+      properties:
+        dAppID:
+          type: string
+          description: Identifier for the client application making the request
+          example: my-dapp
+        intentExecutionTypes:
+          type: array
+          description: Array of intent execution types to filter quotes by
+          example:
+          - SELF_PUBLISH
+          items:
+            type: string
+            enum:
+            - SELF_PUBLISH
+            - GASLESS
+        intentData:
+          description: Intent containing route and reward data for the quote request, and optionally gasless intent data
+          allOf:
+          - $ref: '#/components/schemas/IntentDataDTO'
+      required:
+      - dAppID
+      - intentExecutionTypes
+      - intentData
+    GaslessIntentRequestIntentEntryDTO:
+      type: object
+      properties:
+        routeData:
+          description: Route configuration specifying source and destination chains and transfer details
+          allOf:
+          - $ref: '#/components/schemas/RouteDataDTO'
+        rewardData:
+          description: Reward configuration defining tokens and amounts offered to solvers for executing the intent
+          allOf:
+          - $ref: '#/components/schemas/RewardDataDTO'
+        quoteID:
+          type: string
+          description: Unique identifier of the quote being used to initiate the gasless intent
+          example: quote:01234567-89ab-cdef-0123-456789abcdef
+        solverID:
+          type: string
+          description: Address of the solver that provided the quote
+          example: '0x742d35Cc6634C0532925a3b8D56C85e83F9D18Fa'
+        salt:
+          type: string
+      required:
+      - routeData
+      - rewardData
+      - quoteID
+      - solverID
+      - salt
