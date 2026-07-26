@@ -1,0 +1,61 @@
+generated: '2026-07-19'
+method: searched
+source: probed /.well-known/* across Eco hosts on 2026-07-19
+notes: >-
+  No real .well-known discovery documents were found. www.eco.com is a Webflow
+  site that returns HTTP 200 with the site's HTML shell (a soft-404) for every
+  /.well-known/ path, so those 200s are NOT genuine well-known documents and no
+  raw files were saved. api.eco.com returns 403 and quotes/docs return 404.
+hosts:
+- host: https://www.eco.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    real: false
+    note: HTML soft-404 (Webflow shell), not a security.txt
+  - path: /.well-known/openid-configuration
+    status: 200
+    real: false
+    note: HTML soft-404 (Webflow shell)
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    real: false
+    note: HTML soft-404 (Webflow shell)
+  - path: /.well-known/api-catalog
+    status: 200
+    real: false
+    note: HTML soft-404 (Webflow shell)
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    real: false
+    note: HTML soft-404 (Webflow shell)
+- host: https://api.eco.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+  - path: /.well-known/openid-configuration
+    status: 403
+  - path: /.well-known/oauth-authorization-server
+    status: 403
+  - path: /.well-known/api-catalog
+    status: 403
+  - path: /.well-known/ai-plugin.json
+    status: 403
+- host: https://quotes.eco.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://docs.eco.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404

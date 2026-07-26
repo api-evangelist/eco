@@ -1,0 +1,32 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/eco-routes-openapi-original.json
+notes: >-
+  Derived from the OpenAPI and Eco docs. Eco Routes is an unauthenticated
+  JSON-over-HTTP intent API; it does not implement the enterprise API standards
+  below. Trust/assurance for Eco lives at the smart-contract layer (third-party
+  security audits via Cantina, immutable Portal contract), NOT as SOC 2 / ISO
+  compliance certifications, so no `Compliance` pointer is emitted.
+standards:
+- id: oauth2
+  conforms: false
+  evidence: no oauth2 securitySchemes; API is unauthenticated
+- id: oidc
+  conforms: false
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: errors are not modeled as application/problem+json; envelope is EcoAPIResponse
+- id: json-api
+  conforms: false
+- id: fapi
+  conforms: false
+- id: openapi-3
+  conforms: true
+  evidence: publishes OpenAPI 3.0.0 at https://docs.eco.com/openapi.json
+- id: rest-json
+  conforms: true
+  evidence: all operations are JSON request/response over HTTPS
+audits:
+- kind: smart-contract-security-audit
+  provider: Cantina
+  note: Eco references Cantina audit reports for its onchain contracts (not an API compliance cert)

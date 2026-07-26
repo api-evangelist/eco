@@ -1,0 +1,42 @@
+generated: '2026-07-19'
+method: searched
+source: https://docs.eco.com/api-reference/introduction
+docs: https://docs.eco.com/api-reference/introduction
+notes: >-
+  Cross-cutting request/response semantics for the Eco Routes API, from the docs
+  and OpenAPI. This is an unauthenticated, POST-only JSON RPC-style API for
+  cross-chain intents. Idempotency is NOT provided as an HTTP header contract — at
+  the protocol layer, safety comes instead from deterministic per-intent CREATE2
+  vaults and intent hashes, so no `Idempotency` pointer is emitted (there is no
+  Idempotency-Key header in the spec or docs).
+authentication:
+  style: none
+  attribution: dAppID in request body
+  reference: authentication/eco-authentication.yml
+idempotency:
+  supported: false
+  header: null
+  note: >-
+    No Idempotency-Key header. Idempotency is achieved onchain via deterministic
+    intent hashes and per-intent CREATE2 vault addresses rather than an API-level
+    key.
+pagination:
+  supported: false
+  note: List endpoints (intentsByAddress, refundableIntents) take filter criteria
+    in the request body; no cursor/offset pagination is documented in the spec.
+versioning:
+  style: uri-path
+  values: [v1, v2, v3]
+  current: v3
+  reference: lifecycle/eco-lifecycle.yml
+request_method:
+  note: All operations are HTTP POST with an application/json request body, including reads.
+error_envelope:
+  shape: EcoAPIResponse
+  problem_json: false
+  reference: errors/eco-problem-types.yml
+rate_limiting:
+  signaled: false
+  note: No rate-limit headers or quotas documented in the spec.
+tracing:
+  request_id_header: null

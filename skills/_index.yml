@@ -1,0 +1,17 @@
+generated: '2026-07-19'
+method: generated
+source: openapi/eco-routes-openapi-original.json
+notes: >-
+  Packaged Agent Skills for the Eco Routes API, generated from the OpenAPI. Every
+  step is grounded in a real operationId present in
+  openapi/eco-routes-openapi-original.json. No provider-published AGENTS.md/skill
+  files were found.
+skills:
+- file: eco-quote-and-move-stablecoin.md
+  name: Quote and move a stablecoin cross-chain
+  api: openapi/eco-routes-openapi-original.json
+  operations: [QuotesV3Controller_createQuote, QuotesV3Controller_initiateGaslessIntent, IntentsController_getIntentStatus]
+- file: eco-track-intents.md
+  name: Track cross-chain intents
+  api: openapi/eco-routes-openapi-original.json
+  operations: [IntentsController_getIntentByHash, IntentsController_getIntentsByAddress, IntentsController_getRefundableIntents]

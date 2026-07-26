@@ -1,0 +1,23 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Eco Routes API
+  version: 1.0.0
+extends: openapi/eco-routes-openapi-original.json
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: eco
+    x-apievangelist-category: [Stablecoin, Cross-Chain, Payments, DeFi]
+    x-apievangelist-rating-notes: >-
+      Unauthenticated intent/quote API; dAppID passed in body for attribution.
+      No securitySchemes, no server-side rate-limit or idempotency headers
+      documented in the spec.
+- target: $.info
+  update:
+    x-apievangelist-auth-model: no-auth-with-dappid-attribution
+- target: $.servers
+  update:
+    x-apievangelist-environments:
+      production: https://quotes.eco.com
+      preproduction: https://quotes-preprod.eco.com
+      staging: https://quotes.staging.eco.com

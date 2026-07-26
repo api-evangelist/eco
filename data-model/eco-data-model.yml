@@ -1,0 +1,77 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/eco-routes-openapi-original.json
+notes: >-
+  Entity-relationship graph derived from the Eco Routes OpenAPI component schemas
+  (65 DTOs) and Eco concept docs. The API is organized around cross-chain Intents:
+  a Quote prices a Route, an Intent bundles a Route (what to do on the destination)
+  with a Reward (what the solver earns), is funded into a per-intent Vault, and is
+  fulfilled by a Solver.
+entities:
+- name: Intent
+  description: A cross-chain instruction (Route + Reward) fulfilled by a solver.
+  schemas: [IntentDataV3DTO, IntentDataDTO, IntentStatusV3DTO, IntentByHashResponseV3DTO]
+- name: Route
+  description: The destination-side actions/calls of an intent.
+  schemas: [RouteDataDTO, CallDataDTO, TokenAmountDataDTO]
+- name: Reward
+  description: The reward paid to the solver that fulfills the intent.
+  schemas: [RewardDataDTO]
+- name: Quote
+  description: A price for moving/swapping value across chains (exact-in/out/single).
+  schemas: [QuoteDataDTO, QuoteResponseV3DTO, QuoteResponseDataV3DTO, SingleResponseV3DTO, V1QuoteDataDTO]
+- name: Solver
+  description: A competing party that fronts capital and fulfills intents.
+  schemas: [SolverQuoteDataV2DTO, SolverQuoteV2ResponseDTO]
+- name: GaslessIntent
+  description: An intent authorized via Permit signatures rather than a gas-paying tx.
+  schemas: [GaslessIntentDataDTO, GaslessIntentDataV3DTO, InitiateGaslessIntentDTO, GaslessIntentTransactionDataDTO]
+- name: Permit
+  description: Token approval authorization (Permit / Permit2 / Permit3).
+  schemas: [PermitDTO, Permit2DTO, Permit3DTO, PermitDataDTO, AllowanceOrTransferDTO]
+- name: Token
+  description: A token amount on a specific chain.
+  schemas: [TokenInfoV3DTO, TokenAmountDataDTO]
+- name: Fee
+  description: Fee breakdown attached to a quote.
+  schemas: [FeeV3DTO]
+- name: Transaction
+  description: On/destination-chain transaction and transfer info for an intent.
+  schemas: [TransactionInfoV3DTO, SourceTransferV3DTO, DestinationTransferV3DTO, TransactionWithTransfersV3DTO]
+relationships:
+- from: Intent
+  to: Route
+  type: has_one
+  via: route
+- from: Intent
+  to: Reward
+  type: has_one
+  via: reward
+- from: Intent
+  to: Transaction
+  type: has_many
+  via: transactions
+- from: Quote
+  to: Route
+  type: has_one
+  via: route
+- from: Quote
+  to: Fee
+  type: has_many
+  via: fees
+- from: Route
+  to: Token
+  type: has_many
+  via: tokens
+- from: GaslessIntent
+  to: Permit
+  type: has_many
+  via: permitData
+- from: GaslessIntent
+  to: Intent
+  type: belongs_to
+  via: intent
+- from: Solver
+  to: Quote
+  type: has_many
+  via: quotes

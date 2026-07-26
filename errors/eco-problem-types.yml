@@ -1,0 +1,23 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/eco-routes-openapi-original.json
+format: custom
+envelope: EcoAPIResponse
+notes: >-
+  Derived from OpenAPI 4xx/5xx responses. The Eco Routes spec documents very few
+  error responses explicitly; success payloads and errors are wrapped in the
+  EcoAPIResponse envelope. Responses are NOT RFC 9457 application/problem+json.
+  The docs error reference was not enumerable beyond the spec at capture time.
+problems:
+- status: 404
+  title: No intents found
+  description: No intents found matching the search criteria.
+  source_operation: openapi/eco-routes-openapi-original.json#IntentsController_getIntentStatusArray
+  operation_path: POST /api/v3/intents/status
+- status: default
+  title: Error response
+  description: >-
+    Default (non-2xx) application/json error for gasless intent transaction data
+    retrieval; shape follows the EcoAPIResponse envelope.
+  source_operation: openapi/eco-routes-openapi-original.json#QuotesController_getDestinationChainTransactionHash
+  operation_path: POST /api/v2/quotes/getGaslessIntentTransactionData

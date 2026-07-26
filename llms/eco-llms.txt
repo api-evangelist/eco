@@ -1,0 +1,126 @@
+# Eco Docs
+
+> Eco is the developer platform for programmable stablecoin routing, liquidity, and orchestration across onchain markets — with the best execution guarantees. Four products: Routes (intent-based real-time transfers and swaps), Programmable Addresses (custom deposit and withdrawal logic — Solana Deposit Addresses + Circle Gateway Deposits), Programmable Transactions (Sauce — single-tx multi-contract intelligence, beta), and Orchestration (composition layer, beta). Built on a non-custodial vault model with dual-mode execution (settlement vs orchestration), six modular provers (CCTP, Hyperlane, LayerZero, Metalayer, Polymer, Local), and an immutable Portal contract.
+
+Key constraints: API quote endpoints require no authentication. Solver registration uses signed requests. All smart contract interactions use EVM-compatible wallets where possible; Solana destinations supported. Cross-chain intents are fulfilled by competing solvers who front capital on destination chains. Typical fulfillment time is 20–40 seconds. Integration paths today: CLI or REST API. No SDK currently.
+
+## Get started
+
+- [What is Eco?](https://docs.eco.com/get-started/what-is-eco.md): Top-line + product table + how-it-fits diagram + four design properties (non-custodial vaults, permissionless+immutable, dual-mode execution, runtime intelligence) + Bridge vs Eco comparison + benefits
+- [Choose your product](https://docs.eco.com/get-started/choose-your-product.md): 30-second decision guide for matching use case to product
+- [Quickstart](https://docs.eco.com/get-started/quickstart.md): Move USDC across chains in 5 minutes via CLI or REST API
+
+## Solutions for [persona]
+
+- [Wallets & consumer apps](https://docs.eco.com/solutions/wallets.md): Cross-chain transfers, gasless deposits, one-click swaps
+- [DeFi protocols](https://docs.eco.com/solutions/protocols.md): One-click cross-chain deposits, treasury rebalancing, deeper effective liquidity
+- [Payment platforms & PSPs](https://docs.eco.com/solutions/payments.md): Multi-currency acceptance, deterministic deposit addresses with pre-programmed actions, compliance at solver-selection
+- [Exchanges & onramps](https://docs.eco.com/solutions/exchanges-onramps.md): Auto-routing withdrawal addresses, Gateway integration
+- [Stablecoin issuers](https://docs.eco.com/solutions/issuers.md): Native cross-chain transfers, Crowd Liquidity, issuer-direct solver patterns
+- [Treasury & yield managers](https://docs.eco.com/solutions/treasury-yield.md): Programmatic rebalancing, yield on idle stables, conditional execution
+- [Solvers & market makers](https://docs.eco.com/solutions/solvers.md): Capital-efficient solving, Crowd Liquidity flash-borrow
+- [AI agents](https://docs.eco.com/solutions/agents.md): Single-tx multi-contract orchestration, bounded authority via Permit3
+
+## Concepts
+
+- [Intents](https://docs.eco.com/concepts/intents.md): Anatomy, lifecycle, intent vs transaction
+- [Solvers](https://docs.eco.com/concepts/solvers.md): Competition model, capital efficiency, registration
+- [Provers](https://docs.eco.com/concepts/provers.md): Modular settlement layer, six options, picking the right one
+- [Vaults & resource locks](https://docs.eco.com/concepts/vaults.md): Per-intent CREATE2 escrow, non-custodial by construction
+- [Settlement vs Orchestration](https://docs.eco.com/concepts/settlement-vs-orchestration.md): Dual-mode execution model
+- [Glossary](https://docs.eco.com/concepts/glossary.md): Every term defined in one place
+
+## Routes
+
+- [Routes overview](https://docs.eco.com/routes/overview.md): Intent-based real-time transfers and swaps
+- [Stable 1:1 transfers](https://docs.eco.com/routes/capabilities/stable-1-to-1.md): Same-stable cross-chain transfers at predictable pricing
+- [Cross-stable RFQ](https://docs.eco.com/routes/capabilities/stable-rfq.md): USDC ↔ USDT, USDC ↔ USDG via competing solver pricing
+- [Destination calls](https://docs.eco.com/routes/capabilities/destination-calls.md): Bridge AND interact with a contract atomically
+- [Routes CLI](https://docs.eco.com/routes/integrate/cli.md): Interactive wizard for first-time and manual flows
+- [Routes API](https://docs.eco.com/routes/integrate/api.md): Production REST + smart-contract integration
+
+## Routes architecture
+
+- [Architecture overview](https://docs.eco.com/routes/architecture/overview.md): Portal, Vault, Executor, Provers, ERC-7683
+- [Settlement vs Orchestration](https://docs.eco.com/routes/architecture/settlement-vs-orchestration.md): Dual-mode execution — solver settlement vs vault-orchestrated fulfillment
+- [Portal contract](https://docs.eco.com/routes/architecture/portal.md): Main entry point — publish, fund, fulfill, prove, withdraw
+- [Vault contract](https://docs.eco.com/routes/architecture/vault.md): Per-intent CREATE2 escrow
+- [Executor contract](https://docs.eco.com/routes/architecture/executor.md): Stateless call execution, isolation from Portal
+- [ERC-7683 compatibility](https://docs.eco.com/routes/architecture/erc-7683.md): Standardized cross-chain order interface
+- [Provers overview](https://docs.eco.com/routes/architecture/provers/overview.md): Modular settlement layer
+- [CCTP Prover](https://docs.eco.com/routes/architecture/provers/cctp.md): Issuer attestations via `receiveMessage` — security model is Circle's attestation service
+- [Hyperlane Prover](https://docs.eco.com/routes/architecture/provers/hyperlane.md): Hyperlane ISM validators — configurable security module
+- [LayerZero Prover](https://docs.eco.com/routes/architecture/provers/layerzero.md): DVN consensus — decentralized verifier network
+- [Metalayer Prover](https://docs.eco.com/routes/architecture/provers/metalayer.md): Caldera Metalayer — cross-rollup messaging
+- [Polymer Prover](https://docs.eco.com/routes/architecture/provers/polymer.md): IBC light clients — trust-minimized cross-chain
+- [Local Prover](https://docs.eco.com/routes/architecture/provers/local.md): Same-chain `flashFulfill`, enables orchestration mode
+
+## Primitives
+
+- [Permit3 overview](https://docs.eco.com/routes/primitives/permit3/overview.md): Multi-chain token-permission protocol
+- [Permit3 quickstart](https://docs.eco.com/routes/primitives/permit3/quickstart.md): EIP-712 signing setup, cross-chain permit example
+- [Crowd Liquidity](https://docs.eco.com/routes/primitives/crowd-liquidity.md): Permissionless JIT liquidity for solvers
+
+## Programmable Addresses
+
+- [Programmable Addresses overview](https://docs.eco.com/addresses/overview.md): Deterministic CREATE2 addresses with pre-programmed actions (auto-executes on funding)
+- [Solana Deposit Addresses](https://docs.eco.com/addresses/solana.md): Deterministic EVM address on Base that auto-bridges USDC to a Solana wallet
+- [Circle Gateway Deposits](https://docs.eco.com/addresses/gateway-fast-deposits.md): Gasless USDC into Circle Gateway in 20–40s
+- [Funding methods](https://docs.eco.com/addresses/funding-methods.md): Direct, ERC-3009, EIP-2612 Permit
+- [Solana Deposit Addresses API overview](https://docs.eco.com/api-reference/programmable-addresses/solana-overview.md): Section landing for Solana deposit-address endpoints. Per-endpoint pages are OpenAPI-generated from `solana_deposit_addresses_openapi.json`.
+- [Circle Gateway Deposits API overview](https://docs.eco.com/api-reference/programmable-addresses/gateway-overview.md): Section landing for Gateway + gasless funding endpoints
+- [Factory contract](https://docs.eco.com/addresses/architecture/factory-contract.md): CREATE2-based deterministic address generation
+- [Deposit contract](https://docs.eco.com/addresses/architecture/deposit-contract.md): Per-destination intent-creating contract
+
+## Programmable Transactions
+
+- [Programmable Transactions overview](https://docs.eco.com/transactions/overview.md): Single-tx decision logic, no contract deployment (beta)
+- [Orchestration](https://docs.eco.com/transactions/orchestration.md): Composition of Routes + Permit3 + Sauce + compliance (beta)
+
+## Verified Liquidity
+
+- [Verified Liquidity overview](https://docs.eco.com/verified/overview.md): Permissioned fulfillment lane with a KYB'd solver network, OFAC screening built in, global cross-chain coverage, and per-transfer audit record (closed access)
+
+## Recipes
+
+- [Recipes overview](https://docs.eco.com/recipes/overview.md): Index of end-to-end task guides
+- [Sending USDC across chains](https://docs.eco.com/recipes/send-usdc-cross-chain.md): Server-side Routes integration walkthrough
+- [Auto-routing deposits to any chain](https://docs.eco.com/recipes/auto-route-deposits.md): Solana deposit address pattern
+- [Gasless USDC into Circle Gateway](https://docs.eco.com/recipes/gasless-gateway-deposit.md): ERC-3009 gasless funding into Gateway
+- [Cross-chain treasury rebalancing](https://docs.eco.com/recipes/treasury-rebalancing.md): Programmatic threshold-triggered rebalancer
+- [Becoming an Eco solver](https://docs.eco.com/recipes/become-a-solver.md): Full solver integration walkthrough
+
+## API Reference
+
+- [API Reference introduction](https://docs.eco.com/api-reference/introduction.md): API groups, base URLs, environments
+- [Get Single Quote](https://docs.eco.com/api-reference/quotes-v3/get-single-quote.md): Best single quote for a candidate intent, ready for on-chain execution
+- [Get Exact In Quotes](https://docs.eco.com/api-reference/quotes-v3/get-exact-in-quotes.md): Multiple competing quotes for an exact-input intent
+- [Get Exact Out Quotes](https://docs.eco.com/api-reference/quotes-v3/get-exact-out-quotes.md): Multiple competing quotes for an exact-output intent
+- [Get Intent Status](https://docs.eco.com/api-reference/quotes-v3/get-intent-status.md): Status lookup for a single intent by hash
+- [Get Intent Status Array](https://docs.eco.com/api-reference/quotes-v3/get-intent-status-array.md): Status for multiple intents created in the same tx (max 100)
+- [Generate Gateway Deposit Address](https://docs.eco.com/api-reference/deposit-addresses/generate-gateway-deposit-address.md): Create a deterministic deposit address for Circle Gateway on Polygon
+- [Get Deposit Address Record](https://docs.eco.com/api-reference/deposit-addresses/get-deposit-address-record.md): Look up a deposit address by EVM address
+- [Queue ERC-3009 Gasless Transfer](https://docs.eco.com/api-reference/gasless-funding/queue-erc-3009-gasless-transfer.md): Submit a signed transferWithAuthorization for relayer broadcast
+- [Queue EIP-2612 Permit Transfer](https://docs.eco.com/api-reference/gasless-funding/queue-eip-2612-permit-transfer.md): Submit a signed Permit for relayer broadcast (fallback for non-ERC-3009 tokens)
+- [Poll Gasless Job Status](https://docs.eco.com/api-reference/gasless-funding/poll-gasless-job-status.md): Status of a queued gasless transfer (PENDING → COMPLETED | FAILED)
+- [Register Solver](https://docs.eco.com/api-reference/solver-registration/register-solver.md): Register a new solver (signed request)
+- [Update Solver](https://docs.eco.com/api-reference/solver-registration/update-solver.md): Update solver config (signed request)
+- [Solver: Post Quote](https://docs.eco.com/api-reference/quotev2/post-apiv2quote.md): Solver-implemented quote endpoint (V2 — required by all solvers)
+- [Solver: Post Reverse Quote](https://docs.eco.com/api-reference/quotev2/post-apiv2quotereverse.md): Solver-implemented reverse-quote endpoint (V2 — required by all solvers)
+
+## Resources
+
+- [Supported chains and tokens](https://docs.eco.com/resources/supported-chains-tokens.md): Full chain × token matrix
+- [Contract addresses](https://docs.eco.com/resources/contract-addresses.md): Deployed addresses across chains
+- [Bridge with Eco Portal](https://portal.eco.com/): Hosted bridge UI for end users
+- [Integration inquiry](mailto:contact@eco.com): Contact for partnership and integration questions
+- [Audit reports & bounties (Cantina)](https://cantina.xyz/portfolio/f4ef1cd6-860e-4f58-82de-09751baea324): Cantina portfolio with audit reports and active bug bounty
+- [Discord](https://discord.com/invite/ecommunity): Developer community and support
+
+## Optional
+
+- [Routes API Specification](https://docs.eco.com/openapi.json): Raw OpenAPI 3 spec for Quotes & Intents endpoints (`quotes.eco.com`)
+- [Solana Deposit Addresses API Specification](https://docs.eco.com/solana_deposit_addresses_openapi.json): Raw OpenAPI 3 spec for Solana deposit-address generation (`deposit-addresses.eco.com`)
+- [Circle Gateway Deposits API Specification](https://docs.eco.com/gateway_fast_deposits_openapi.json): Raw OpenAPI 3 spec for Gateway deposit-address generation and gasless funding (`deposit-addresses.eco.com`)
+- [Solver Registry API Specification](https://docs.eco.com/openapi_1.json): Raw OpenAPI 3 spec for solver registration (signed requests)
+- [Solver Interface API Specification](https://docs.eco.com/solver_openapi.json): Raw OpenAPI 3 spec for endpoints solvers implement (called by Eco's quote aggregator)

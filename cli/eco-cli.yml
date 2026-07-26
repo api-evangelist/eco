@@ -1,0 +1,23 @@
+generated: '2026-07-19'
+method: searched
+source: https://docs.eco.com/routes/integrate/cli
+name: Routes CLI
+description: >-
+  Eco's first-party Routes CLI — an interactive wizard for publishing intents to
+  EVM, TVM, and SVM chains. Documented as the fastest path to move USDC across
+  chains ("in 5 minutes") for first-time and manual flows, alongside the REST API.
+repository: https://github.com/eco/routes-cli
+docs: https://docs.eco.com/routes/integrate/cli
+install:
+- registry: npm
+  name: eco-routes-cli
+  version: 1.0.5
+  command: npm install -g eco-routes-cli
+  url: https://www.npmjs.com/package/eco-routes-cli
+capabilities:
+- Interactive wizard for building and publishing cross-chain intents
+- Publish intents to EVM, TVM (Tron) and SVM (Solana) chains
+- Quickstart flow to move USDC across chains
+surface_notes: >-
+  The published command/flag surface is not enumerated in the docs excerpt; the
+  CLI is primarily an interactive wizard rather than a scriptable subcommand tree.

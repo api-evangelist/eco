@@ -1,0 +1,55 @@
+generated: '2026-07-19'
+method: searched
+source: https://www.npmjs.com/org/eco-foundation
+notes: >-
+  First-party client libraries published under the @eco-foundation npm scope,
+  sourced from the github.com/eco organization. Eco's docs currently describe
+  integration as "CLI or REST API" and say "no SDK", but the toolkit SDK and
+  protocol/chains/KMS TypeScript libraries are published and maintained by the
+  team. The Routes CLI is catalogued separately in cli/eco-cli.yml.
+packages:
+- language: javascript
+  registry: npm
+  name: "@eco-foundation/routes-sdk"
+  version: 0.14.4
+  url: https://www.npmjs.com/package/@eco-foundation/routes-sdk
+  install: npm install @eco-foundation/routes-sdk
+  repository: https://github.com/eco/toolkit
+  description: Eco Routes toolkit SDK for building and submitting cross-chain intents.
+  official: true
+- language: javascript
+  registry: npm
+  name: "@eco-foundation/routes-ts"
+  version: 3.2.19
+  url: https://www.npmjs.com/package/@eco-foundation/routes-ts
+  install: npm install @eco-foundation/routes-ts
+  repository: https://github.com/eco/eco-routes
+  description: TypeScript bindings for the Eco Routes Protocol intent-based system.
+  official: true
+- language: solidity
+  registry: npm
+  name: "@eco-foundation/routes"
+  version: 3.2.5
+  url: https://www.npmjs.com/package/@eco-foundation/routes
+  install: npm install @eco-foundation/routes
+  repository: https://github.com/eco/eco-routes
+  description: Eco Routes Protocol Solidity contracts and interfaces.
+  official: true
+- language: javascript
+  registry: npm
+  name: "@eco-foundation/chains"
+  version: 2.3.3
+  url: https://www.npmjs.com/package/@eco-foundation/chains
+  install: npm install @eco-foundation/chains
+  repository: https://github.com/eco/eco-chains
+  description: TypeScript library of chains supported and deployed by the Eco protocol.
+  official: true
+- language: javascript
+  registry: npm
+  name: "@eco-foundation/eco-kms-core"
+  version: 2.0.0
+  url: https://www.npmjs.com/package/@eco-foundation/eco-kms-core
+  install: npm install @eco-foundation/eco-kms-core
+  repository: https://github.com/eco/eco-kms
+  description: Core library for Eco KMS — sign Ethereum transactions and messages.
+  official: true

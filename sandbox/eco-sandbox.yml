@@ -1,0 +1,26 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/eco-routes-openapi-original.json
+notes: >-
+  Eco does not publish a card-style test-credential sandbox (it is an onchain
+  intent network, not a card acquirer). The non-production separation it does
+  provide is server environments declared in the OpenAPI, plus the hosted Portal
+  bridge UI for manual test transfers. No fabricated test values.
+environments:
+- name: production
+  base_url: https://quotes.eco.com
+- name: preproduction
+  base_url: https://quotes-preprod.eco.com
+- name: staging
+  base_url: https://quotes.staging.eco.com
+- name: local
+  base_url: http://localhost:3000
+hosted_ui:
+  name: Portal
+  url: https://portal.eco.com
+  description: Web-based bridging interface for stablecoin transfers; usable to exercise routes manually.
+test_data:
+  note: >-
+    No published magic test identifiers or test tokens. Testing is done against
+    real testnet/mainnet chains with real wallets; there is no synthetic test-card
+    equivalent.

@@ -1,0 +1,59 @@
+generated: '2026-07-19'
+method: derived
+status: candidate
+source: openapi/eco-routes-openapi-original.json
+notes: >-
+  No official hosted/remote Eco MCP server was found (no entry in the MCP registry,
+  npm @modelcontextprotocol scope, or Eco docs as of 2026-07-19). This is a
+  DERIVED candidate tool list — one tool per OpenAPI operationId — to seed a future
+  MCP server. All Routes endpoints are unauthenticated POST calls, which map
+  cleanly to MCP tools.
+server:
+  name: eco-routes
+  transport: http
+tools:
+- name: get_intent_status
+  description: Query the current status of a single cross-chain intent by hash.
+  source_operation: openapi/eco-routes-openapi-original.json#IntentsController_getIntentStatus
+- name: get_intent_status_batch
+  description: Query status for an array of intents.
+  source_operation: openapi/eco-routes-openapi-original.json#IntentsController_getIntentStatusArray
+- name: get_intents_by_address
+  description: List intents associated with an address.
+  source_operation: openapi/eco-routes-openapi-original.json#IntentsController_getIntentsByAddress
+- name: get_intent_by_hash
+  description: Retrieve a single intent by its hash.
+  source_operation: openapi/eco-routes-openapi-original.json#IntentsController_getIntentByHash
+- name: get_refundable_intents
+  description: List intents eligible for refund.
+  source_operation: openapi/eco-routes-openapi-original.json#IntentsController_getRefundableIntents
+- name: get_quote_single_v3
+  description: Get the best single cross-chain stablecoin quote (V3).
+  source_operation: openapi/eco-routes-openapi-original.json#QuotesV3Controller_createQuote
+- name: get_quote_exact_out_v3
+  description: Get an exact-output quote (V3).
+  source_operation: openapi/eco-routes-openapi-original.json#QuotesV3Controller_getQuotes
+- name: get_quote_exact_in_v3
+  description: Get an exact-input (reverse) quote (V3).
+  source_operation: openapi/eco-routes-openapi-original.json#QuotesV3Controller_getReverseQuotes
+- name: initiate_gasless_intent_v3
+  description: Initiate a gasless intent (V3).
+  source_operation: openapi/eco-routes-openapi-original.json#QuotesV3Controller_initiateGaslessIntent
+- name: get_quotes_v2
+  description: Get quotes (V2).
+  source_operation: openapi/eco-routes-openapi-original.json#QuotesController_getQuotes
+- name: get_reverse_quote_v2
+  description: Get a reverse quote (V2).
+  source_operation: openapi/eco-routes-openapi-original.json#QuotesController_getReverseQuote
+- name: initiate_gasless_intent_v2
+  description: Initiate a gasless intent (V2).
+  source_operation: openapi/eco-routes-openapi-original.json#QuotesController_initiateGaslessIntent
+- name: get_gasless_intent_transaction_data_v2
+  description: Get destination-chain transaction data for a gasless intent (V2).
+  source_operation: openapi/eco-routes-openapi-original.json#QuotesController_getDestinationChainTransactionHash
+- name: get_quotes_v1
+  description: Get quotes (V1, legacy).
+  source_operation: openapi/eco-routes-openapi-original.json#V1QuotesController_getQuotes
+- name: get_reverse_quote_v1
+  description: Get a reverse quote (V1, legacy).
+  source_operation: openapi/eco-routes-openapi-original.json#V1QuotesController_getReverseQuote
