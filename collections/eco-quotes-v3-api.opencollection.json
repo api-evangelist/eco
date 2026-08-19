@@ -1,0 +1,153 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Eco Routes Quotes V1 Quotes V3 API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Quotes V3",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Intent Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://quotes.eco.com/api/v3/intents/intentStatus",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Query the current status of a cross-chain intent transaction. Provide one of: intentHash, intentCreatedHash, or fulfillmentHash to track the intent's progress through the execution lifecycle."
+        },
+        {
+          "info": {
+            "name": "Get Intent Status Array",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://quotes.eco.com/api/v3/intents/status",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Query the status of multiple intents created in the same transaction. Returns an array of intent statuses ordered by creation event log index. Provide one of: intentHash, intentCreatedHash, or fulfillmentHash. Limited to 100 results."
+        },
+        {
+          "info": {
+            "name": "Get Intents By Address",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://quotes.eco.com/api/v3/intents/intentsByAddress",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Query intents by creator/funder addresses across EVM, Solana, and Tron chains. Supports pagination and date range filtering. At least one address array must be provided."
+        },
+        {
+          "info": {
+            "name": "Get Intent Activity By Hash",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://quotes.eco.com/api/v3/intents/intentByHash",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Lookup an intent by its hash and return full activity details including lifecycle events (fulfillment, refund). Searches across EVM, Solana, and Tron chains."
+        },
+        {
+          "info": {
+            "name": "Get Refundable Intents",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://quotes.eco.com/api/v3/intents/refundableIntents",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Query refundable intents (expired without fulfillment or refund) by creator/funder addresses across EVM, Solana, and Tron chains. At least one address array must be provided."
+        },
+        {
+          "info": {
+            "name": "Get Exact Out Quotes",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://quotes.eco.com/api/v3/quotes/exactOut",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieve exact out quotes from solvers for a cross-chain token swap. Returns detailed pricing, fees, contract addresses, and estimated fulfillment time for the requested swap."
+        },
+        {
+          "info": {
+            "name": "Get Exact In Quotes",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://quotes.eco.com/api/v3/quotes/exactIn",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieve exact in quotes from solvers for a given intent. Exact in quotes allow you to specify what you want to offer and get quotes for what will be received and can only have transfer calls."
+        },
+        {
+          "info": {
+            "name": "Get Single Quote",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://quotes.eco.com/api/v3/quotes/single",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieve the best quote for a cross-chain single token swap. Returns detailed pricing, fees, contract addresses, and estimated fulfillment time for the requested swap. This endpoint should only be used for intents intended to be published onchain."
+        },
+        {
+          "info": {
+            "name": "Initiate Gasless Intent",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://quotes.eco.com/api/v3/quotes/initiateGaslessIntent",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit a gasless intent transaction using a previously obtained quote. This endpoint initiates the gasless execution of an intent with the specified solver."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -2,12 +2,10 @@ generated: '2026-07-19'
 method: derived
 status: candidate
 source: openapi/eco-routes-openapi-original.json
-notes: >-
-  No official hosted/remote Eco MCP server was found (no entry in the MCP registry,
-  npm @modelcontextprotocol scope, or Eco docs as of 2026-07-19). This is a
-  DERIVED candidate tool list — one tool per OpenAPI operationId — to seed a future
-  MCP server. All Routes endpoints are unauthenticated POST calls, which map
-  cleanly to MCP tools.
+notes: No official hosted/remote Eco MCP server was found (no entry in the MCP registry, npm @modelcontextprotocol
+  scope, or Eco docs as of 2026-07-19). This is a DERIVED candidate tool list — one tool per OpenAPI operationId
+  — to seed a future MCP server. All Routes endpoints are unauthenticated POST calls, which map cleanly
+  to MCP tools.
 server:
   name: eco-routes
   transport: http
@@ -57,3 +55,9 @@ tools:
 - name: get_reverse_quote_v1
   description: Get a reverse quote (V1, legacy).
   source_operation: openapi/eco-routes-openapi-original.json#V1QuotesController_getReverseQuote
+deployment:
+  mode: none
+  verified: derived
+  tools: 15
+  checked: '2026-08-12'
+  source: catalog MCP census

@@ -1,0 +1,224 @@
+{
+  "item": [
+    {
+      "id": "bf98f087-9f30-4359-a195-fa62a5887fcf",
+      "name": "Quotes V1",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "97292742-b89e-4f9a-9054-80384d0eedec",
+          "name": "Get Quotes",
+          "request": {
+            "name": "Get Quotes",
+            "description": {
+              "content": "Retrieve quotes from solvers for a given intent. Returns an array of quotes with pricing and execution details from available solvers.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "quotes"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dAppID\": \"<string>\",\n  \"intentData\": {\n    \"routeData\": {\n      \"originChainID\": \"<string>\",\n      \"destinationChainID\": \"<string>\",\n      \"inboxContract\": \"<string>\",\n      \"tokens\": [\n        {\n          \"token\": \"<string>\",\n          \"amount\": \"<string>\"\n        },\n        {\n          \"token\": \"<string>\",\n          \"amount\": \"<string>\"\n        }\n      ],\n      \"calls\": [\n        {\n          \"target\": \"<string>\",\n          \"data\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        {\n          \"target\": \"<string>\",\n          \"data\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      ],\n      \"salt\": \"<string>\"\n    },\n    \"rewardData\": {\n      \"creator\": \"<string>\",\n      \"proverContract\": \"<string>\",\n      \"deadline\": \"<string>\",\n      \"nativeValue\": \"<string>\",\n      \"tokens\": [\n        {\n          \"token\": \"<string>\",\n          \"amount\": \"<string>\"\n        },\n        {\n          \"token\": \"<string>\",\n          \"amount\": \"<string>\"\n        }\n      ]\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "386907e9-d0c0-43f3-9abc-68c22c91119b",
+              "name": "Successfully retrieved quotes from solvers",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "quotes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"dAppID\": \"my-dapp\",\n  \"intentData\": {\n    \"routeData\": {\n      \"originChainID\": \"8453\",\n      \"destinationChainID\": \"10\",\n      \"inboxContract\": \"0x123abc456def789012345678901234567890abcd\",\n      \"tokens\": [\n        {\n          \"token\": \"0xA0b86a33E6441446C1c3df4c64B739C7e4a81ec0\",\n          \"amount\": \"1000000\"\n        },\n        {\n          \"token\": \"0xA0b86a33E6441446C1c3df4c64B739C7e4a81ec0\",\n          \"amount\": \"1000000\"\n        }\n      ],\n      \"calls\": [\n        {\n          \"target\": \"0x742d35Cc6634C0532925a3b8D56C85e83F9D18Fa\",\n          \"data\": \"0xa9059cbb000000000000000000000000742d35cc6634c0532925a3b8d56c85e83f9d18fa0000000000000000000000000000000000000000000000000000000000989680\",\n          \"value\": \"0\"\n        },\n        {\n          \"target\": \"0x742d35Cc6634C0532925a3b8D56C85e83F9D18Fa\",\n          \"data\": \"0xa9059cbb000000000000000000000000742d35cc6634c0532925a3b8d56c85e83f9d18fa0000000000000000000000000000000000000000000000000000000000989680\",\n          \"value\": \"0\"\n        }\n      ],\n      \"salt\": \"0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\"\n    },\n    \"rewardData\": {\n      \"creator\": \"0x742d35Cc6634C0532925a3b8D56C85e83F9D18Fa\",\n      \"proverContract\": \"0x1234567890abcdef1234567890abcdef12345678\",\n      \"deadline\": \"1699123456\",\n      \"nativeValue\": \"0\",\n      \"tokens\": [\n        {\n          \"token\": \"0xA0b86a33E6441446C1c3df4c64B739C7e4a81ec0\",\n          \"amount\": \"1000000\"\n        },\n        {\n          \"token\": \"0xA0b86a33E6441446C1c3df4c64B739C7e4a81ec0\",\n          \"amount\": \"1000000\"\n        }\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"quoteData\": {\n        \"tokens\": [\n          {\n            \"token\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"token\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"expiryTime\": \"1699123456\",\n        \"estimatedFulfillTimeSec\": 30,\n        \"nativeValue\": \"0\"\n      }\n    },\n    {\n      \"quoteData\": {\n        \"tokens\": [\n          {\n            \"token\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"token\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"expiryTime\": \"1699123456\",\n        \"estimatedFulfillTimeSec\": 30,\n        \"nativeValue\": \"0\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "53c2a26c-0530-46fc-a51e-75ac789a10e2",
+          "name": "Get Reverse Quotes",
+          "request": {
+            "name": "Get Reverse Quotes",
+            "description": {
+              "content": "Retrieve reverse quotes from solvers for a given intent. Reverse quotes allow you to specify what you want to offer and get quotes for what will be received and can only have transfer calls.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "quotes",
+                "reverse"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dAppID\": \"<string>\",\n  \"intentData\": {\n    \"routeData\": {\n      \"originChainID\": \"<string>\",\n      \"destinationChainID\": \"<string>\",\n      \"inboxContract\": \"<string>\",\n      \"tokens\": [\n        {\n          \"token\": \"<string>\",\n          \"amount\": \"<string>\"\n        },\n        {\n          \"token\": \"<string>\",\n          \"amount\": \"<string>\"\n        }\n      ],\n      \"calls\": [\n        {\n          \"target\": \"<string>\",\n          \"data\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        {\n          \"target\": \"<string>\",\n          \"data\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      ],\n      \"salt\": \"<string>\"\n    },\n    \"rewardData\": {\n      \"creator\": \"<string>\",\n      \"proverContract\": \"<string>\",\n      \"deadline\": \"<string>\",\n      \"nativeValue\": \"<string>\",\n      \"tokens\": [\n        {\n          \"token\": \"<string>\",\n          \"amount\": \"<string>\"\n        },\n        {\n          \"token\": \"<string>\",\n          \"amount\": \"<string>\"\n        }\n      ]\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ee5087cd-f874-4050-ba17-5fe3b6064e51",
+              "name": "Successfully retrieved reverse quotes from solvers",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "quotes",
+                    "reverse"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"dAppID\": \"my-dapp\",\n  \"intentData\": {\n    \"routeData\": {\n      \"originChainID\": \"8453\",\n      \"destinationChainID\": \"10\",\n      \"inboxContract\": \"0x123abc456def789012345678901234567890abcd\",\n      \"tokens\": [\n        {\n          \"token\": \"0xA0b86a33E6441446C1c3df4c64B739C7e4a81ec0\",\n          \"amount\": \"1000000\"\n        },\n        {\n          \"token\": \"0xA0b86a33E6441446C1c3df4c64B739C7e4a81ec0\",\n          \"amount\": \"1000000\"\n        }\n      ],\n      \"calls\": [\n        {\n          \"target\": \"0x742d35Cc6634C0532925a3b8D56C85e83F9D18Fa\",\n          \"data\": \"0xa9059cbb000000000000000000000000742d35cc6634c0532925a3b8d56c85e83f9d18fa0000000000000000000000000000000000000000000000000000000000989680\",\n          \"value\": \"0\"\n        },\n        {\n          \"target\": \"0x742d35Cc6634C0532925a3b8D56C85e83F9D18Fa\",\n          \"data\": \"0xa9059cbb000000000000000000000000742d35cc6634c0532925a3b8d56c85e83f9d18fa0000000000000000000000000000000000000000000000000000000000989680\",\n          \"value\": \"0\"\n        }\n      ],\n      \"salt\": \"0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\"\n    },\n    \"rewardData\": {\n      \"creator\": \"0x742d35Cc6634C0532925a3b8D56C85e83F9D18Fa\",\n      \"proverContract\": \"0x1234567890abcdef1234567890abcdef12345678\",\n      \"deadline\": \"1699123456\",\n      \"nativeValue\": \"0\",\n      \"tokens\": [\n        {\n          \"token\": \"0xA0b86a33E6441446C1c3df4c64B739C7e4a81ec0\",\n          \"amount\": \"1000000\"\n        },\n        {\n          \"token\": \"0xA0b86a33E6441446C1c3df4c64B739C7e4a81ec0\",\n          \"amount\": \"1000000\"\n        }\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"quoteData\": {\n        \"tokens\": [\n          {\n            \"token\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"token\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"expiryTime\": \"1699123456\",\n        \"estimatedFulfillTimeSec\": 30,\n        \"nativeValue\": \"0\"\n      }\n    },\n    {\n      \"quoteData\": {\n        \"tokens\": [\n          {\n            \"token\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"token\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"expiryTime\": \"1699123456\",\n        \"estimatedFulfillTimeSec\": 30,\n        \"nativeValue\": \"0\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://quotes.eco.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "1fe6a38e-a693-424d-b490-ac0c10bf19fa",
+    "name": "Eco Routes Quotes V1 API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Eco Routes API documentation",
+      "type": "text/plain"
+    }
+  }
+}

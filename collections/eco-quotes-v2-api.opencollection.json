@@ -1,0 +1,78 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Eco Routes Quotes V1 Quotes V2 API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Quotes V2",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Quotes",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://quotes.eco.com/api/v2/quotes",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieve quotes from solvers for a given intent. Returns an array of quotes with pricing and execution details from available solvers."
+        },
+        {
+          "info": {
+            "name": "Get Reverse Quotes",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://quotes.eco.com/api/v2/quotes/reverse",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieve reverse quotes from solvers for a given intent. Reverse quotes allow you to specify what you want to offer and get quotes for what will be received and can only have transfer calls."
+        },
+        {
+          "info": {
+            "name": "Initiate Gasless Intent",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://quotes.eco.com/api/v2/quotes/initiateGaslessIntent",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit a gasless intent transaction using a previously obtained quote. This endpoint initiates the gasless execution of an intent with the specified solver."
+        },
+        {
+          "info": {
+            "name": "Get Gasless Intent Transaction Data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://quotes.eco.com/api/v2/quotes/getGaslessIntentTransactionData",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get Gasless Intent Transaction Data"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
