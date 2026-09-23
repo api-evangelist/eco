@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
   title: Eco Routes Quotes V1 API
   description: Eco Routes API documentation
@@ -60,6 +60,20 @@ paths:
       - Quotes V1
 components:
   schemas:
+    TokenAmountDataDTO:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Address of the ERC20 token contract
+          example: '0xA0b86a33E6441446C1c3df4c64B739C7e4a81ec0'
+        amount:
+          type: string
+          description: Token amount in smallest unit (wei for ETH, base units for ERC20 tokens)
+          example: '1000000'
+      required:
+      - token
+      - amount
     V1GetQuotesResponseDTO:
       type: object
       properties:
@@ -70,20 +84,6 @@ components:
             $ref: '#/components/schemas/V1QuoteResponseDTO'
       required:
       - data
-    V1GetQuotesDTO:
-      type: object
-      properties:
-        dAppID:
-          type: string
-          description: Unique identifier for the dApp making the quote request
-          example: my-dapp
-        intentData:
-          description: Intent data containing route and reward information for the quote request
-          allOf:
-          - $ref: '#/components/schemas/V1IntentDataDTO'
-      required:
-      - dAppID
-      - intentData
     RouteDataDTO:
       type: object
       properties:
@@ -119,53 +119,6 @@ components:
       - inboxContract
       - tokens
       - calls
-    TokenAmountDataDTO:
-      type: object
-      properties:
-        token:
-          type: string
-          description: Address of the ERC20 token contract
-          example: '0xA0b86a33E6441446C1c3df4c64B739C7e4a81ec0'
-        amount:
-          type: string
-          description: Token amount in smallest unit (wei for ETH, base units for ERC20 tokens)
-          example: '1000000'
-      required:
-      - token
-      - amount
-    V1QuoteResponseDTO:
-      type: object
-      properties:
-        quoteData:
-          description: Quote data containing the pricing and execution details for this quote
-          allOf:
-          - $ref: '#/components/schemas/V1QuoteDataDTO'
-      required:
-      - quoteData
-    V1QuoteDataDTO:
-      type: object
-      properties:
-        tokens:
-          description: Array of ERC20 tokens and amounts required for this quote
-          type: array
-          items:
-            $ref: '#/components/schemas/TokenAmountDataDTO'
-        nativeValue:
-          type: string
-          description: Native token value required for this quote (in wei)
-          example: '0'
-        expiryTime:
-          type: string
-          description: Unix timestamp when this quote expires
-          example: '1699123456'
-        estimatedFulfillTimeSec:
-          type: number
-          description: Estimated time in seconds for the intent to be fulfilled after submission
-          example: 30
-      required:
-      - tokens
-      - expiryTime
-      - estimatedFulfillTimeSec
     RewardDataDTO:
       type: object
       properties:
@@ -215,6 +168,30 @@ components:
       - target
       - data
       - value
+    V1QuoteDataDTO:
+      type: object
+      properties:
+        tokens:
+          description: Array of ERC20 tokens and amounts required for this quote
+          type: array
+          items:
+            $ref: '#/components/schemas/TokenAmountDataDTO'
+        nativeValue:
+          type: string
+          description: Native token value required for this quote (in wei)
+          example: '0'
+        expiryTime:
+          type: string
+          description: Unix timestamp when this quote expires
+          example: '1699123456'
+        estimatedFulfillTimeSec:
+          type: number
+          description: Estimated time in seconds for the intent to be fulfilled after submission
+          example: 30
+      required:
+      - tokens
+      - expiryTime
+      - estimatedFulfillTimeSec
     V1IntentDataDTO:
       type: object
       properties:
@@ -225,3 +202,26 @@ components:
       required:
       - routeData
       - rewardData
+    V1QuoteResponseDTO:
+      type: object
+      properties:
+        quoteData:
+          description: Quote data containing the pricing and execution details for this quote
+          allOf:
+          - $ref: '#/components/schemas/V1QuoteDataDTO'
+      required:
+      - quoteData
+    V1GetQuotesDTO:
+      type: object
+      properties:
+        dAppID:
+          type: string
+          description: Unique identifier for the dApp making the quote request
+          example: my-dapp
+        intentData:
+          description: Intent data containing route and reward information for the quote request
+          allOf:
+          - $ref: '#/components/schemas/V1IntentDataDTO'
+      required:
+      - dAppID
+      - intentData

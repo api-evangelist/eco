@@ -1,9 +1,7 @@
 {
   "provider": "eco",
   "sources": [
-    "eco-quotes-v1-api-openapi.yml",
-    "eco-quotes-v2-api-openapi.yml",
-    "eco-quotes-v3-api-openapi.yml"
+    "_original/eco-routes-openapi-original.json"
   ],
   "outputs": [
     "eco-quotes-v1-api-openapi.yml",
@@ -13,6 +11,17 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "eco-routes-openapi-original.json: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "eco-routes-openapi-original.json: declared missing tag: Quotes V1",
+    "eco-routes-openapi-original.json: declared missing tag: Quotes V2",
+    "eco-routes-openapi-original.json: declared missing tag: Quotes V3",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "eco-quotes-v1-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "eco-quotes-v2-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "eco-quotes-v3-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
