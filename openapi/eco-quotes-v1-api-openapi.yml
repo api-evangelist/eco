@@ -60,107 +60,6 @@ paths:
       - Quotes V1
 components:
   schemas:
-    V1QuoteResponseDTO:
-      type: object
-      properties:
-        quoteData:
-          description: Quote data containing the pricing and execution details for this quote
-          allOf:
-          - $ref: '#/components/schemas/V1QuoteDataDTO'
-      required:
-      - quoteData
-    CallDataDTO:
-      type: object
-      properties:
-        target:
-          type: string
-          description: Address of the contract to call or recipient for native token transfers
-          example: '0x742d35Cc6634C0532925a3b8D56C85e83F9D18Fa'
-        data:
-          type: string
-          description: Encoded function call data or empty for native token transfers
-          example: '0xa9059cbb000000000000000000000000742d35cc6634c0532925a3b8d56c85e83f9d18fa0000000000000000000000000000000000000000000000000000000000989680'
-        value:
-          type: string
-          description: Native token value to send with the call (in wei)
-          example: '0'
-      required:
-      - target
-      - data
-      - value
-    V1QuoteDataDTO:
-      type: object
-      properties:
-        tokens:
-          description: Array of ERC20 tokens and amounts required for this quote
-          type: array
-          items:
-            $ref: '#/components/schemas/TokenAmountDataDTO'
-        nativeValue:
-          type: string
-          description: Native token value required for this quote (in wei)
-          example: '0'
-        expiryTime:
-          type: string
-          description: Unix timestamp when this quote expires
-          example: '1699123456'
-        estimatedFulfillTimeSec:
-          type: number
-          description: Estimated time in seconds for the intent to be fulfilled after submission
-          example: 30
-      required:
-      - tokens
-      - expiryTime
-      - estimatedFulfillTimeSec
-    V1GetQuotesDTO:
-      type: object
-      properties:
-        dAppID:
-          type: string
-          description: Unique identifier for the dApp making the quote request
-          example: my-dapp
-        intentData:
-          description: Intent data containing route and reward information for the quote request
-          allOf:
-          - $ref: '#/components/schemas/V1IntentDataDTO'
-      required:
-      - dAppID
-      - intentData
-    RouteDataDTO:
-      type: object
-      properties:
-        originChainID:
-          type: string
-          description: Chain ID where the intent originates
-          example: '8453'
-        destinationChainID:
-          type: string
-          description: Chain ID where the intent will be executed
-          example: '10'
-        inboxContract:
-          type: string
-          description: Address of the inbox contract on the destination chain
-          example: '0x123abc456def789012345678901234567890abcd'
-        tokens:
-          description: Array of ERC20 tokens and amounts involved in the destination calls
-          type: array
-          items:
-            $ref: '#/components/schemas/TokenAmountDataDTO'
-        calls:
-          description: Array of contract calls to be executed on the destination chain
-          type: array
-          items:
-            $ref: '#/components/schemas/CallDataDTO'
-        salt:
-          type: string
-          description: Salt for the intent (used when initiating gasless intents or publishing onchain, set to '0x0' for quote requests)
-          example: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef'
-      required:
-      - originChainID
-      - destinationChainID
-      - inboxContract
-      - tokens
-      - calls
     TokenAmountDataDTO:
       type: object
       properties:
@@ -215,6 +114,64 @@ components:
             $ref: '#/components/schemas/V1QuoteResponseDTO'
       required:
       - data
+    V1GetQuotesDTO:
+      type: object
+      properties:
+        dAppID:
+          type: string
+          description: Unique identifier for the dApp making the quote request
+          example: my-dapp
+        intentData:
+          description: Intent data containing route and reward information for the quote request
+          allOf:
+          - $ref: '#/components/schemas/V1IntentDataDTO'
+      required:
+      - dAppID
+      - intentData
+    RouteDataDTO:
+      type: object
+      properties:
+        originChainID:
+          type: string
+          description: Chain ID where the intent originates
+          example: '8453'
+        destinationChainID:
+          type: string
+          description: Chain ID where the intent will be executed
+          example: '10'
+        inboxContract:
+          type: string
+          description: Address of the inbox contract on the destination chain
+          example: '0x123abc456def789012345678901234567890abcd'
+        tokens:
+          description: Array of ERC20 tokens and amounts involved in the destination calls
+          type: array
+          items:
+            $ref: '#/components/schemas/TokenAmountDataDTO'
+        calls:
+          description: Array of contract calls to be executed on the destination chain
+          type: array
+          items:
+            $ref: '#/components/schemas/CallDataDTO'
+        salt:
+          type: string
+          description: Salt for the intent (used when initiating gasless intents or publishing onchain, set to '0x0' for quote requests)
+          example: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef'
+      required:
+      - originChainID
+      - destinationChainID
+      - inboxContract
+      - tokens
+      - calls
+    V1QuoteResponseDTO:
+      type: object
+      properties:
+        quoteData:
+          description: Quote data containing the pricing and execution details for this quote
+          allOf:
+          - $ref: '#/components/schemas/V1QuoteDataDTO'
+      required:
+      - quoteData
     V1IntentDataDTO:
       type: object
       properties:
@@ -225,3 +182,46 @@ components:
       required:
       - routeData
       - rewardData
+    V1QuoteDataDTO:
+      type: object
+      properties:
+        tokens:
+          description: Array of ERC20 tokens and amounts required for this quote
+          type: array
+          items:
+            $ref: '#/components/schemas/TokenAmountDataDTO'
+        nativeValue:
+          type: string
+          description: Native token value required for this quote (in wei)
+          example: '0'
+        expiryTime:
+          type: string
+          description: Unix timestamp when this quote expires
+          example: '1699123456'
+        estimatedFulfillTimeSec:
+          type: number
+          description: Estimated time in seconds for the intent to be fulfilled after submission
+          example: 30
+      required:
+      - tokens
+      - expiryTime
+      - estimatedFulfillTimeSec
+    CallDataDTO:
+      type: object
+      properties:
+        target:
+          type: string
+          description: Address of the contract to call or recipient for native token transfers
+          example: '0x742d35Cc6634C0532925a3b8D56C85e83F9D18Fa'
+        data:
+          type: string
+          description: Encoded function call data or empty for native token transfers
+          example: '0xa9059cbb000000000000000000000000742d35cc6634c0532925a3b8d56c85e83f9d18fa0000000000000000000000000000000000000000000000000000000000989680'
+        value:
+          type: string
+          description: Native token value to send with the call (in wei)
+          example: '0'
+      required:
+      - target
+      - data
+      - value
