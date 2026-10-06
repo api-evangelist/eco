@@ -50,7 +50,7 @@ accessModel:
   method: derived
 specificationVersion: '0.23'
 created: '2026-07-17'
-modified: '2026-07-19'
+modified: '2026-10-06'
 image: https://cdn.prod.website-files.com/67af51ad91d062ee8ef52137/69c2cc38e52fc86cca6c5320_Stablecoin%20Economy%20OG%20(5)%20(1).jpg
 x-docs-platform: mintlify
 x-docs-platform-confidence: medium
@@ -133,6 +133,10 @@ apis:
   - type: GettingStarted
     url: https://docs.eco.com/get-started/quickstart
 common:
+- url: https://www.eco.com/blog/
+  type: Blog
+- url: https://eco.com/blog/rss/
+  type: BlogRSS
 - type: DomainSecurity
   url: security/eco-domain-security.yml
 - type: Website
