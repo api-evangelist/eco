@@ -209,6 +209,87 @@ paths:
       - Quotes V3
 components:
   schemas:
+    IntentStatusRequestV3DTO:
+      type: object
+      properties:
+        intentHash:
+          type: string
+          description: Hash of the intent to query status for
+        intentCreatedHash:
+          type: string
+          description: Transaction hash of the intent creation transaction
+        fulfillmentHash:
+          type: string
+          description: Transaction hash of the intent fulfillment transaction
+      oneOf:
+      - required:
+        - intentHash
+      - required:
+        - intentCreatedHash
+      - required:
+        - fulfillmentHash
+    InitiateGaslessIntentV3DTO:
+      type: object
+      properties:
+        intentGroupID:
+          type: string
+          description: Unique identifier of the group of intents being used
+          example: group:01234567-89ab-cdef-0123-456789abcdef
+        dAppID:
+          type: string
+          description: Identifier for the client application initiating the gasless intent
+          example: my-dapp
+        intentEntries:
+          description: Array of intent request entries
+          type: array
+          items:
+            $ref: '#/components/schemas/GaslessIntentRequestIntentEntryDTO'
+        gaslessIntentData:
+          description: Gasless intent configuration containing permit signatures and execution parameters
+          allOf:
+          - $ref: '#/components/schemas/GaslessIntentDataV3DTO'
+      required:
+      - intentGroupID
+      - dAppID
+      - intentEntries
+      - gaslessIntentData
+    IntentStatusArrayResponseV3DTO:
+      type: object
+      properties:
+        data:
+          description: Array of intent statuses matching the search criteria (with log indexes and timestamps)
+          type: array
+          items:
+            $ref: '#/components/schemas/IntentStatusWithMetadataV3DTO'
+      required:
+      - data
+    StatusV3DTO:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - Pending
+          - Completed
+          description: High-level status of the intent (Pending or Completed)
+          example: Pending
+        subStatus:
+          type: string
+          enum:
+          - WaitingToFulfill
+          - WaitingForRefund
+          - Fulfilled
+          - Refunded
+          description: Detailed status indicating the specific stage of intent execution
+          example: WaitingToFulfill
+        subStatusMessage:
+          type: string
+          description: Human-readable description of the substatus
+          example: The intent is waiting to be fulfilled
+      required:
+      - status
+      - subStatus
+      - subStatusMessage
     QuoteV3ResponseContractsDTO:
       type: object
       properties:
@@ -228,6 +309,133 @@ components:
       - sourcePortal
       - destinationPortal
       - prover
+    IntentDataV3DTO:
+      type: object
+      properties:
+        sourceChainID:
+          type: number
+          description: Source chain ID where the intent was created
+          example: 42161
+        destinationChainID:
+          type: number
+          description: Destination chain ID where the intent will be fulfilled
+          example: 167000
+        creator:
+          type: string
+          description: Address that created the intent
+          example: '0x1234567890abcdef1234567890abcdef12345678'
+        refundRecipient:
+          type: string
+          description: Address that received the refund (only set when intent has been refunded)
+          example: '0x1234567890abcdef1234567890abcdef12345678'
+        deadline:
+          type: number
+          description: Unix timestamp when the intent expires and becomes refundable
+          example: 1730000000
+        createdAt:
+          type: number
+          description: Unix timestamp when the intent was created
+          example: 1729500000
+        sourceTransfers:
+          description: Array of reward token transfers (what the prover receives from the creator). Does not include recipients.
+          example:
+          - token: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
+            amount: '1000000'
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceTransferV3DTO'
+        destinationTransfers:
+          description: Array of destination transfers (tokens and recipients on the destination chain). Always includes recipients.
+          example:
+          - token: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
+            amount: '1000000'
+            recipient: '0x054968e2f376192c69b8f30870d450519ff77ac8'
+          type: array
+          items:
+            $ref: '#/components/schemas/DestinationTransferV3DTO'
+      required:
+      - sourceChainID
+      - destinationChainID
+      - creator
+      - deadline
+      - createdAt
+      - sourceTransfers
+      - destinationTransfers
+    EventInfoDTO:
+      type: object
+      properties:
+        txHash:
+          type: string
+          description: Transaction hash of the event
+          example: 0x1234567890abcdef...
+        timestamp:
+          type: number
+          description: Unix timestamp when the event occurred
+          example: 1729600000
+        chainID:
+          type: number
+          description: Chain ID where the event occurred
+          example: 8453
+      required:
+      - txHash
+      - timestamp
+      - chainID
+    DestinationTransferV3DTO:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Token address (use "0x" for native tokens)
+          example: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
+        amount:
+          type: string
+          description: Token amount as string
+          example: '1000000'
+        recipient:
+          type: string
+          description: Recipient address for this transfer
+          example: '0x9876543210abcdef9876543210abcdef98765432'
+      required:
+      - token
+      - amount
+      - recipient
+    QuotesV3RequestContractsDTO:
+      type: object
+      properties:
+        sourcePortal:
+          type: string
+          description: Contract address for the intent source (where intents are created and managed)
+          example: '0x1234567890abcdef1234567890abcdef12345678'
+        destinationPortal:
+          type: string
+          description: Contract address for the inbox (receives and processes cross-chain messages)
+          example: '0x567890abcdef1234567890abcdef1234567890ab'
+        prover:
+          type: string
+          description: Contract address for the prover (handles cross-chain proof verification)
+          example: '0xabcdef1234567890abcdef1234567890abcdef12'
+    IntentByHashRequestV3DTO:
+      type: object
+      properties:
+        intentHash:
+          type: string
+          description: Intent hash to look up
+          example: 0xabc123...
+      required:
+      - intentHash
+    SolverQuoteDataV2DTO:
+      type: object
+      properties:
+        quoteResponse:
+          description: Detailed quote information including tokens, amounts, fees, and timing
+          allOf:
+          - $ref: '#/components/schemas/QuoteResponseDataV3DTO'
+        contracts:
+          description: Contract addresses required for executing this cross-chain swap
+          allOf:
+          - $ref: '#/components/schemas/QuoteV3ResponseContractsDTO'
+      required:
+      - contracts
     IntentStatusV3DTO:
       type: object
       properties:
@@ -255,6 +463,308 @@ components:
       - intentHash
       - status
       - intentCreated
+    SingleRequestV3DTO:
+      type: object
+      properties:
+        dAppID:
+          type: string
+          description: Unique identifier for the client application making the request
+          example: my-dapp
+        quoteRequest:
+          description: Cross-chain token swap request details including source/destination tokens and addresses
+          allOf:
+          - $ref: '#/components/schemas/QuoteRequestV3DTO'
+        contracts:
+          description: Optional contract addresses to use for the cross-chain swap (will use defaults if not specified)
+          allOf:
+          - $ref: '#/components/schemas/QuotesV3RequestContractsDTO'
+      required:
+      - dAppID
+      - quoteRequest
+    InitiateGaslessIntentResponseV3DTO:
+      type: object
+      properties:
+        data:
+          description: Gasless intent execution response data
+          allOf:
+          - $ref: '#/components/schemas/GaslessIntentExecutionResponseDTO'
+      required:
+      - data
+    TokenInfoV3DTO:
+      type: object
+      properties:
+        address:
+          type: string
+          description: Contract address of the token
+          example: '0xA0b86a33E6441e45C3b9d1C3D6a0b5be4b7b5b5a'
+        decimals:
+          type: number
+          description: Number of decimal places for the token
+          example: 6
+        symbol:
+          type: string
+          description: Token symbol or ticker
+          example: USDC
+      required:
+      - address
+      - decimals
+      - symbol
+    QuotesRequestV3DTO:
+      type: object
+      properties:
+        dAppID:
+          type: string
+          description: Unique identifier for the client application making the request
+          example: my-dapp
+        intentExecutionTypes:
+          type: array
+          description: Array of intent execution types to fetch quotes for
+          example:
+          - SELF_PUBLISH
+          items:
+            type: string
+            enum:
+            - SELF_PUBLISH
+            - GASLESS
+        quoteRequest:
+          description: Cross-chain token swap request details including source/destination tokens and addresses
+          allOf:
+          - $ref: '#/components/schemas/QuoteRequestV3DTO'
+        contracts:
+          description: Optional contract addresses to use for the cross-chain swap (will use defaults if not specified)
+          allOf:
+          - $ref: '#/components/schemas/QuotesV3RequestContractsDTO'
+      required:
+      - dAppID
+      - intentExecutionTypes
+      - quoteRequest
+    IntentStatusWithMetadataV3DTO:
+      type: object
+      properties:
+        intentHash:
+          type: string
+          description: Hash of the intent being tracked
+          example: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef12'
+        status:
+          description: Current status and sub-status of the intent execution
+          allOf:
+          - $ref: '#/components/schemas/StatusV3DTO'
+        intentData:
+          description: Intent definition data including chain IDs, creator, deadline, and transfers
+          allOf:
+          - $ref: '#/components/schemas/IntentDataV3DTO'
+        sendingTxs:
+          description: Transactions that sent tokens on the source chain (intent creation). Transfers do not include recipients.
+          example:
+          - chainId: 42161
+            timestamp: 1729163645
+            txHash: '0xe1ffdcf09d5aa92a2d89b1b39db3f8cadf09428a296cce0d5e387595ac83d08f'
+            txLink: https://arbiscan.io/tx/0xe1ffdcf09d5aa92a2d89b1b39db3f8cadf09428a296cce0d5e387595ac83d08f
+            transfers:
+            - token: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
+              amount: '1000000'
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionWithTransfersV3DTO'
+        receivingTxs:
+          description: Transactions that received tokens on the destination chain (fulfillment or refund). Transfers always include recipients.
+          example:
+          - chainId: 10
+            timestamp: 1729164000
+            txHash: '0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890'
+            txLink: https://optimistic.etherscan.io/tx/0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890
+            transfers:
+            - token: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
+              amount: '1000000'
+              recipient: '0x054968e2f376192c69b8f30870d450519ff77ac8'
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionWithTransfersV3DTO'
+      required:
+      - intentHash
+      - status
+      - intentData
+      - sendingTxs
+      - receivingTxs
+    CallDataDTO:
+      type: object
+      properties:
+        target:
+          type: string
+          description: Address of the contract to call or recipient for native token transfers
+          example: '0x742d35Cc6634C0532925a3b8D56C85e83F9D18Fa'
+        data:
+          type: string
+          description: Encoded function call data or empty for native token transfers
+          example: '0xa9059cbb000000000000000000000000742d35cc6634c0532925a3b8d56c85e83f9d18fa0000000000000000000000000000000000000000000000000000000000989680'
+        value:
+          type: string
+          description: Native token value to send with the call (in wei)
+          example: '0'
+      required:
+      - target
+      - data
+      - value
+    TransactionInfoV3DTO:
+      type: object
+      properties:
+        chainId:
+          type: number
+          description: Chain ID where this transaction occurred
+          example: 1
+        transactionHash:
+          type: string
+          description: Hash of the transaction
+          example: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef12'
+        blockExplorerUrl:
+          type: string
+          description: URL to view this transaction on a block explorer
+          example: https://etherscan.io/tx/0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef12
+      required:
+      - chainId
+      - transactionHash
+      - blockExplorerUrl
+    IntentsResponseV3DTO:
+      type: object
+      properties:
+        data:
+          description: Array of intents matching the request
+          type: array
+          items:
+            $ref: '#/components/schemas/IntentActivityV3DTO'
+      required:
+      - data
+    GaslessIntentDataV3DTO:
+      type: object
+      properties:
+        permit3:
+          description: Permit3 signature data for multi-chain token approvals
+          allOf:
+          - $ref: '#/components/schemas/Permit3DTO'
+        allowPartial:
+          type: boolean
+          description: Whether to allow partial funding of the intent
+          example: false
+          default: false
+      required:
+      - permit3
+    IntentByHashResponseV3DTO:
+      type: object
+      properties:
+        data:
+          description: Intent activity details
+          allOf:
+          - $ref: '#/components/schemas/IntentActivityV3DTO'
+      required:
+      - data
+    SourceTransferV3DTO:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Token address (use "0x" for native tokens)
+          example: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
+        amount:
+          type: string
+          description: Token amount as string
+          example: '1000000'
+      required:
+      - token
+      - amount
+    IntentsByAddressRequestV3DTO:
+      type: object
+      properties:
+        evmAddresses:
+          description: Array of EVM addresses (0x...) to filter intents by creator/funder
+          example:
+          - '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb'
+          type: array
+          items:
+            type: string
+        solanaAddresses:
+          description: Array of Solana addresses (base58) to filter intents by creator/funder
+          example:
+          - 9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM
+          type: array
+          items:
+            type: string
+        tronAddresses:
+          description: Array of Tron addresses (T...) to filter intents by creator/funder
+          example:
+          - TYASr5UV6HEcXatwdFQfmLVUqQQQMUxHLS
+          type: array
+          items:
+            type: string
+        startTimestamp:
+          type: number
+          description: 'Start timestamp (Unix seconds) for date range filter (default: 7 days ago)'
+          example: 1704067200
+        endTimestamp:
+          type: number
+          description: 'End timestamp (Unix seconds) for date range filter (default: now)'
+          example: 1704153600
+    QuotesResponseV3DTO:
+      type: object
+      properties:
+        data:
+          description: Array of solver quote responses
+          type: array
+          items:
+            $ref: '#/components/schemas/SolverQuoteV2ResponseDTO'
+      required:
+      - data
+    GaslessIntentRequestIntentEntryDTO:
+      type: object
+      properties:
+        routeData:
+          description: Route configuration specifying source and destination chains and transfer details
+          allOf:
+          - $ref: '#/components/schemas/RouteDataDTO'
+        rewardData:
+          description: Reward configuration defining tokens and amounts offered to solvers for executing the intent
+          allOf:
+          - $ref: '#/components/schemas/RewardDataDTO'
+        quoteID:
+          type: string
+          description: Unique identifier of the quote being used to initiate the gasless intent
+          example: quote:01234567-89ab-cdef-0123-456789abcdef
+        solverID:
+          type: string
+          description: Address of the solver that provided the quote
+          example: '0x742d35Cc6634C0532925a3b8D56C85e83F9D18Fa'
+        salt:
+          type: string
+      required:
+      - routeData
+      - rewardData
+      - quoteID
+      - solverID
+      - salt
+    SolverQuoteV2ResponseDTO:
+      type: object
+      properties:
+        quoteID:
+          type: string
+        solverID:
+          type: string
+        receiveSignedIntentUrl:
+          type: string
+        quoteData:
+          $ref: '#/components/schemas/SolverQuoteDataV2DTO'
+      required:
+      - quoteID
+      - solverID
+      - receiveSignedIntentUrl
+      - quoteData
+    IntentStatusResponseV3DTO:
+      type: object
+      properties:
+        data:
+          description: Intent status response data
+          allOf:
+          - $ref: '#/components/schemas/IntentStatusV3DTO'
+      required:
+      - data
     QuoteRequestV3DTO:
       type: object
       properties:
@@ -298,44 +808,6 @@ components:
       - sourceAmount
       - funder
       - recipient
-    DestinationTransferV3DTO:
-      type: object
-      properties:
-        token:
-          type: string
-          description: Token address (use "0x" for native tokens)
-          example: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
-        amount:
-          type: string
-          description: Token amount as string
-          example: '1000000'
-        recipient:
-          type: string
-          description: Recipient address for this transfer
-          example: '0x9876543210abcdef9876543210abcdef98765432'
-      required:
-      - token
-      - amount
-      - recipient
-    IntentStatusResponseV3DTO:
-      type: object
-      properties:
-        data:
-          description: Intent status response data
-          allOf:
-          - $ref: '#/components/schemas/IntentStatusV3DTO'
-      required:
-      - data
-    IntentsResponseV3DTO:
-      type: object
-      properties:
-        data:
-          description: Array of intents matching the request
-          type: array
-          items:
-            $ref: '#/components/schemas/IntentActivityV3DTO'
-      required:
-      - data
     IntentActivityV3DTO:
       type: object
       properties:
@@ -411,274 +883,6 @@ components:
       - createdTxHash
       - contract
       - isGasless
-    IntentStatusWithMetadataV3DTO:
-      type: object
-      properties:
-        intentHash:
-          type: string
-          description: Hash of the intent being tracked
-          example: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef12'
-        status:
-          description: Current status and sub-status of the intent execution
-          allOf:
-          - $ref: '#/components/schemas/StatusV3DTO'
-        intentData:
-          description: Intent definition data including chain IDs, creator, deadline, and transfers
-          allOf:
-          - $ref: '#/components/schemas/IntentDataV3DTO'
-        sendingTxs:
-          description: Transactions that sent tokens on the source chain (intent creation). Transfers do not include recipients.
-          example:
-          - chainId: 42161
-            timestamp: 1729163645
-            txHash: '0xe1ffdcf09d5aa92a2d89b1b39db3f8cadf09428a296cce0d5e387595ac83d08f'
-            txLink: https://arbiscan.io/tx/0xe1ffdcf09d5aa92a2d89b1b39db3f8cadf09428a296cce0d5e387595ac83d08f
-            transfers:
-            - token: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
-              amount: '1000000'
-          type: array
-          items:
-            $ref: '#/components/schemas/TransactionWithTransfersV3DTO'
-        receivingTxs:
-          description: Transactions that received tokens on the destination chain (fulfillment or refund). Transfers always include recipients.
-          example:
-          - chainId: 10
-            timestamp: 1729164000
-            txHash: '0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890'
-            txLink: https://optimistic.etherscan.io/tx/0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890
-            transfers:
-            - token: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
-              amount: '1000000'
-              recipient: '0x054968e2f376192c69b8f30870d450519ff77ac8'
-          type: array
-          items:
-            $ref: '#/components/schemas/TransactionWithTransfersV3DTO'
-      required:
-      - intentHash
-      - status
-      - intentData
-      - sendingTxs
-      - receivingTxs
-    StatusV3DTO:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - Pending
-          - Completed
-          description: High-level status of the intent (Pending or Completed)
-          example: Pending
-        subStatus:
-          type: string
-          enum:
-          - WaitingToFulfill
-          - WaitingForRefund
-          - Fulfilled
-          - Refunded
-          description: Detailed status indicating the specific stage of intent execution
-          example: WaitingToFulfill
-        subStatusMessage:
-          type: string
-          description: Human-readable description of the substatus
-          example: The intent is waiting to be fulfilled
-      required:
-      - status
-      - subStatus
-      - subStatusMessage
-    TokenAmountDataDTO:
-      type: object
-      properties:
-        token:
-          type: string
-          description: Address of the ERC20 token contract
-          example: '0xA0b86a33E6441446C1c3df4c64B739C7e4a81ec0'
-        amount:
-          type: string
-          description: Token amount in smallest unit (wei for ETH, base units for ERC20 tokens)
-          example: '1000000'
-      required:
-      - token
-      - amount
-    SourceTransferV3DTO:
-      type: object
-      properties:
-        token:
-          type: string
-          description: Token address (use "0x" for native tokens)
-          example: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
-        amount:
-          type: string
-          description: Token amount as string
-          example: '1000000'
-      required:
-      - token
-      - amount
-    CallDataDTO:
-      type: object
-      properties:
-        target:
-          type: string
-          description: Address of the contract to call or recipient for native token transfers
-          example: '0x742d35Cc6634C0532925a3b8D56C85e83F9D18Fa'
-        data:
-          type: string
-          description: Encoded function call data or empty for native token transfers
-          example: '0xa9059cbb000000000000000000000000742d35cc6634c0532925a3b8d56c85e83f9d18fa0000000000000000000000000000000000000000000000000000000000989680'
-        value:
-          type: string
-          description: Native token value to send with the call (in wei)
-          example: '0'
-      required:
-      - target
-      - data
-      - value
-    IntentDataV3DTO:
-      type: object
-      properties:
-        sourceChainID:
-          type: number
-          description: Source chain ID where the intent was created
-          example: 42161
-        destinationChainID:
-          type: number
-          description: Destination chain ID where the intent will be fulfilled
-          example: 167000
-        creator:
-          type: string
-          description: Address that created the intent
-          example: '0x1234567890abcdef1234567890abcdef12345678'
-        refundRecipient:
-          type: string
-          description: Address that received the refund (only set when intent has been refunded)
-          example: '0x1234567890abcdef1234567890abcdef12345678'
-        deadline:
-          type: number
-          description: Unix timestamp when the intent expires and becomes refundable
-          example: 1730000000
-        createdAt:
-          type: number
-          description: Unix timestamp when the intent was created
-          example: 1729500000
-        sourceTransfers:
-          description: Array of reward token transfers (what the prover receives from the creator). Does not include recipients.
-          example:
-          - token: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
-            amount: '1000000'
-          type: array
-          items:
-            $ref: '#/components/schemas/SourceTransferV3DTO'
-        destinationTransfers:
-          description: Array of destination transfers (tokens and recipients on the destination chain). Always includes recipients.
-          example:
-          - token: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
-            amount: '1000000'
-            recipient: '0x054968e2f376192c69b8f30870d450519ff77ac8'
-          type: array
-          items:
-            $ref: '#/components/schemas/DestinationTransferV3DTO'
-      required:
-      - sourceChainID
-      - destinationChainID
-      - creator
-      - deadline
-      - createdAt
-      - sourceTransfers
-      - destinationTransfers
-    EventInfoDTO:
-      type: object
-      properties:
-        txHash:
-          type: string
-          description: Transaction hash of the event
-          example: 0x1234567890abcdef...
-        timestamp:
-          type: number
-          description: Unix timestamp when the event occurred
-          example: 1729600000
-        chainID:
-          type: number
-          description: Chain ID where the event occurred
-          example: 8453
-      required:
-      - txHash
-      - timestamp
-      - chainID
-    RewardDataDTO:
-      type: object
-      properties:
-        creator:
-          type: string
-          description: Address of the user creating this intent, this will be the recipient of a refund if the intent expires
-          example: '0x742d35Cc6634C0532925a3b8D56C85e83F9D18Fa'
-        proverContract:
-          type: string
-          description: Address of the prover contract that validates intent execution
-          example: '0x1234567890abcdef1234567890abcdef12345678'
-        deadline:
-          type: string
-          description: Unix timestamp deadline for when this intent expires (in seconds)
-          example: '1699123456'
-        nativeValue:
-          type: string
-          description: Native token amount offered (in wei)
-          example: '0'
-        tokens:
-          description: Array of ERC20 tokens and amounts offered on the origin chain for fulfilling the intent
-          type: array
-          items:
-            $ref: '#/components/schemas/TokenAmountDataDTO'
-      required:
-      - creator
-      - proverContract
-      - deadline
-      - nativeValue
-      - tokens
-    SolverQuoteV2ResponseDTO:
-      type: object
-      properties:
-        quoteID:
-          type: string
-        solverID:
-          type: string
-        receiveSignedIntentUrl:
-          type: string
-        quoteData:
-          $ref: '#/components/schemas/SolverQuoteDataV2DTO'
-      required:
-      - quoteID
-      - solverID
-      - receiveSignedIntentUrl
-      - quoteData
-    QuotesRequestV3DTO:
-      type: object
-      properties:
-        dAppID:
-          type: string
-          description: Unique identifier for the client application making the request
-          example: my-dapp
-        intentExecutionTypes:
-          type: array
-          description: Array of intent execution types to fetch quotes for
-          example:
-          - SELF_PUBLISH
-          items:
-            type: string
-            enum:
-            - SELF_PUBLISH
-            - GASLESS
-        quoteRequest:
-          description: Cross-chain token swap request details including source/destination tokens and addresses
-          allOf:
-          - $ref: '#/components/schemas/QuoteRequestV3DTO'
-        contracts:
-          description: Optional contract addresses to use for the cross-chain swap (will use defaults if not specified)
-          allOf:
-          - $ref: '#/components/schemas/QuotesV3RequestContractsDTO'
-      required:
-      - dAppID
-      - intentExecutionTypes
-      - quoteRequest
     QuoteResponseV3DTO:
       type: object
       properties:
@@ -692,34 +896,6 @@ components:
           - $ref: '#/components/schemas/QuoteV3ResponseContractsDTO'
       required:
       - contracts
-    SolverQuoteDataV2DTO:
-      type: object
-      properties:
-        quoteResponse:
-          description: Detailed quote information including tokens, amounts, fees, and timing
-          allOf:
-          - $ref: '#/components/schemas/QuoteResponseDataV3DTO'
-        contracts:
-          description: Contract addresses required for executing this cross-chain swap
-          allOf:
-          - $ref: '#/components/schemas/QuoteV3ResponseContractsDTO'
-      required:
-      - contracts
-    QuotesV3RequestContractsDTO:
-      type: object
-      properties:
-        sourcePortal:
-          type: string
-          description: Contract address for the intent source (where intents are created and managed)
-          example: '0x1234567890abcdef1234567890abcdef12345678'
-        destinationPortal:
-          type: string
-          description: Contract address for the inbox (receives and processes cross-chain messages)
-          example: '0x567890abcdef1234567890abcdef1234567890ab'
-        prover:
-          type: string
-          description: Contract address for the prover (handles cross-chain proof verification)
-          example: '0xabcdef1234567890abcdef1234567890abcdef12'
     GaslessIntentExecutionResponseDTO:
       type: object
       properties:
@@ -736,202 +912,6 @@ components:
       required:
       - successes
       - failures
-    TokenInfoV3DTO:
-      type: object
-      properties:
-        address:
-          type: string
-          description: Contract address of the token
-          example: '0xA0b86a33E6441e45C3b9d1C3D6a0b5be4b7b5b5a'
-        decimals:
-          type: number
-          description: Number of decimal places for the token
-          example: 6
-        symbol:
-          type: string
-          description: Token symbol or ticker
-          example: USDC
-      required:
-      - address
-      - decimals
-      - symbol
-    GaslessIntentExecutionResponseEntryDTO:
-      type: object
-      properties:
-        chainID:
-          type: number
-          description: Chain ID where the gasless intent was executed
-          example: 1
-        quoteIDs:
-          description: Array of quote IDs associated with this execution
-          example:
-          - quote_abc123def456
-          - quote_ghi789jkl012
-          type: array
-          items:
-            type: string
-        transactionHash:
-          type: string
-          description: Transaction hash of the executed gasless intent
-          example: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef'
-        error:
-          type: object
-          description: Error details if the gasless intent execution failed
-          example:
-            message: Insufficient balance
-            code: INSUFFICIENT_FUNDS
-      required:
-      - chainID
-      - quoteIDs
-      - transactionHash
-    QuotesResponseV3DTO:
-      type: object
-      properties:
-        data:
-          description: Array of solver quote responses
-          type: array
-          items:
-            $ref: '#/components/schemas/SolverQuoteV2ResponseDTO'
-      required:
-      - data
-    IntentStatusRequestV3DTO:
-      type: object
-      properties:
-        intentHash:
-          type: string
-          description: Hash of the intent to query status for
-        intentCreatedHash:
-          type: string
-          description: Transaction hash of the intent creation transaction
-        fulfillmentHash:
-          type: string
-          description: Transaction hash of the intent fulfillment transaction
-      oneOf:
-      - required:
-        - intentHash
-      - required:
-        - intentCreatedHash
-      - required:
-        - fulfillmentHash
-    TransactionWithTransfersV3DTO:
-      type: object
-      properties:
-        chainId:
-          type: number
-          description: Chain ID where this transaction occurred
-          example: 42161
-        timestamp:
-          type: number
-          description: Unix timestamp of the transaction
-          example: 1729163645
-        txHash:
-          type: string
-          description: Transaction hash
-          example: '0xe1ffdcf09d5aa92a2d89b1b39db3f8cadf09428a296cce0d5e387595ac83d08f'
-        txLink:
-          type: string
-          description: Block explorer URL for this transaction
-          example: https://arbiscan.io/tx/0xe1ffdcf09d5aa92a2d89b1b39db3f8cadf09428a296cce0d5e387595ac83d08f
-        transfers:
-          type: array
-          description: Token transfers associated with this transaction. Source transfers (sendingTxs) do not include recipients. Destination transfers (receivingTxs) include recipients.
-          items:
-            oneOf:
-            - $ref: '#/components/schemas/SourceTransferV3DTO'
-            - $ref: '#/components/schemas/DestinationTransferV3DTO'
-          example:
-          - token: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
-            amount: '1000000'
-            recipient: '0x054968e2f376192c69b8f30870d450519ff77ac8'
-      required:
-      - chainId
-      - timestamp
-      - txHash
-      - txLink
-      - transfers
-    AllowanceOrTransferDTO:
-      type: object
-      properties:
-        chainID:
-          type: number
-          description: The chain ID where the allowance or transfer occurs
-          example: 1
-        modeOrExpiration:
-          type: number
-          description: Mode for allowance (0) or expiration timestamp for transfer
-          example: 0
-        tokenKey:
-          type: string
-          description: Token contract address
-          example: '0xA0b86a33E6441B8Ec2c8C7E5b0d77D5FdDa0c4E4'
-        account:
-          type: string
-          description: Account address for the allowance or transfer
-          example: '0x742d35cc6634c0532925a3b8b0eff6a2db3b51a'
-        amountDelta:
-          type: string
-          description: Amount delta for the allowance or transfer (in wei)
-          example: '1000000000000000000'
-      required:
-      - chainID
-      - modeOrExpiration
-      - tokenKey
-      - account
-      - amountDelta
-    TransactionInfoV3DTO:
-      type: object
-      properties:
-        chainId:
-          type: number
-          description: Chain ID where this transaction occurred
-          example: 1
-        transactionHash:
-          type: string
-          description: Hash of the transaction
-          example: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef12'
-        blockExplorerUrl:
-          type: string
-          description: URL to view this transaction on a block explorer
-          example: https://etherscan.io/tx/0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef12
-      required:
-      - chainId
-      - transactionHash
-      - blockExplorerUrl
-    RouteDataDTO:
-      type: object
-      properties:
-        originChainID:
-          type: string
-          description: Chain ID where the intent originates
-          example: '8453'
-        destinationChainID:
-          type: string
-          description: Chain ID where the intent will be executed
-          example: '10'
-        inboxContract:
-          type: string
-          description: Address of the inbox contract on the destination chain
-          example: '0x123abc456def789012345678901234567890abcd'
-        tokens:
-          description: Array of ERC20 tokens and amounts involved in the destination calls
-          type: array
-          items:
-            $ref: '#/components/schemas/TokenAmountDataDTO'
-        calls:
-          description: Array of contract calls to be executed on the destination chain
-          type: array
-          items:
-            $ref: '#/components/schemas/CallDataDTO'
-        salt:
-          type: string
-          description: Salt for the intent (used when initiating gasless intents or publishing onchain, set to '0x0' for quote requests)
-          example: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef'
-      required:
-      - originChainID
-      - destinationChainID
-      - inboxContract
-      - tokens
-      - calls
     Permit3DTO:
       type: object
       properties:
@@ -991,30 +971,51 @@ components:
       - merkleRoot
       - leaves
       - allowanceOrTransfers
-    RefundableIntentsRequestV3DTO:
+    SingleResponseV3DTO:
       type: object
       properties:
-        evmAddresses:
-          description: Array of EVM addresses (0x...) to filter refundable intents by creator/funder
-          example:
-          - '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb'
+        data:
+          description: Quote response data
+          allOf:
+          - $ref: '#/components/schemas/QuoteResponseV3DTO'
+      required:
+      - data
+    TransactionWithTransfersV3DTO:
+      type: object
+      properties:
+        chainId:
+          type: number
+          description: Chain ID where this transaction occurred
+          example: 42161
+        timestamp:
+          type: number
+          description: Unix timestamp of the transaction
+          example: 1729163645
+        txHash:
+          type: string
+          description: Transaction hash
+          example: '0xe1ffdcf09d5aa92a2d89b1b39db3f8cadf09428a296cce0d5e387595ac83d08f'
+        txLink:
+          type: string
+          description: Block explorer URL for this transaction
+          example: https://arbiscan.io/tx/0xe1ffdcf09d5aa92a2d89b1b39db3f8cadf09428a296cce0d5e387595ac83d08f
+        transfers:
           type: array
+          description: Token transfers associated with this transaction. Source transfers (sendingTxs) do not include recipients. Destination transfers (receivingTxs) include recipients.
           items:
-            type: string
-        solanaAddresses:
-          description: Array of Solana addresses (base58) to filter refundable intents by creator/funder
+            oneOf:
+            - $ref: '#/components/schemas/SourceTransferV3DTO'
+            - $ref: '#/components/schemas/DestinationTransferV3DTO'
           example:
-          - 9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM
-          type: array
-          items:
-            type: string
-        tronAddresses:
-          description: Array of Tron addresses (T...) to filter refundable intents by creator/funder
-          example:
-          - TYASr5UV6HEcXatwdFQfmLVUqQQQMUxHLS
-          type: array
-          items:
-            type: string
+          - token: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
+            amount: '1000000'
+            recipient: '0x054968e2f376192c69b8f30870d450519ff77ac8'
+      required:
+      - chainId
+      - timestamp
+      - txHash
+      - txLink
+      - transfers
     QuoteResponseDataV3DTO:
       type: object
       properties:
@@ -1093,117 +1094,88 @@ components:
       - deadline
       - estimatedFulfillTimeSec
       - encodedRoute
-    SingleRequestV3DTO:
+    GaslessIntentExecutionResponseEntryDTO:
       type: object
       properties:
-        dAppID:
+        chainID:
+          type: number
+          description: Chain ID where the gasless intent was executed
+          example: 1
+        quoteIDs:
+          description: Array of quote IDs associated with this execution
+          example:
+          - quote_abc123def456
+          - quote_ghi789jkl012
+          type: array
+          items:
+            type: string
+        transactionHash:
           type: string
-          description: Unique identifier for the client application making the request
-          example: my-dapp
-        quoteRequest:
-          description: Cross-chain token swap request details including source/destination tokens and addresses
-          allOf:
-          - $ref: '#/components/schemas/QuoteRequestV3DTO'
-        contracts:
-          description: Optional contract addresses to use for the cross-chain swap (will use defaults if not specified)
-          allOf:
-          - $ref: '#/components/schemas/QuotesV3RequestContractsDTO'
+          description: Transaction hash of the executed gasless intent
+          example: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef'
+        error:
+          type: object
+          description: Error details if the gasless intent execution failed
+          example:
+            message: Insufficient balance
+            code: INSUFFICIENT_FUNDS
       required:
-      - dAppID
-      - quoteRequest
-    IntentsByAddressRequestV3DTO:
+      - chainID
+      - quoteIDs
+      - transactionHash
+    AllowanceOrTransferDTO:
+      type: object
+      properties:
+        chainID:
+          type: number
+          description: The chain ID where the allowance or transfer occurs
+          example: 1
+        modeOrExpiration:
+          type: number
+          description: Mode for allowance (0) or expiration timestamp for transfer
+          example: 0
+        tokenKey:
+          type: string
+          description: Token contract address
+          example: '0xA0b86a33E6441B8Ec2c8C7E5b0d77D5FdDa0c4E4'
+        account:
+          type: string
+          description: Account address for the allowance or transfer
+          example: '0x742d35cc6634c0532925a3b8b0eff6a2db3b51a'
+        amountDelta:
+          type: string
+          description: Amount delta for the allowance or transfer (in wei)
+          example: '1000000000000000000'
+      required:
+      - chainID
+      - modeOrExpiration
+      - tokenKey
+      - account
+      - amountDelta
+    RefundableIntentsRequestV3DTO:
       type: object
       properties:
         evmAddresses:
-          description: Array of EVM addresses (0x...) to filter intents by creator/funder
+          description: Array of EVM addresses (0x...) to filter refundable intents by creator/funder
           example:
           - '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb'
           type: array
           items:
             type: string
         solanaAddresses:
-          description: Array of Solana addresses (base58) to filter intents by creator/funder
+          description: Array of Solana addresses (base58) to filter refundable intents by creator/funder
           example:
           - 9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM
           type: array
           items:
             type: string
         tronAddresses:
-          description: Array of Tron addresses (T...) to filter intents by creator/funder
+          description: Array of Tron addresses (T...) to filter refundable intents by creator/funder
           example:
           - TYASr5UV6HEcXatwdFQfmLVUqQQQMUxHLS
           type: array
           items:
             type: string
-        startTimestamp:
-          type: number
-          description: 'Start timestamp (Unix seconds) for date range filter (default: 7 days ago)'
-          example: 1704067200
-        endTimestamp:
-          type: number
-          description: 'End timestamp (Unix seconds) for date range filter (default: now)'
-          example: 1704153600
-    IntentByHashRequestV3DTO:
-      type: object
-      properties:
-        intentHash:
-          type: string
-          description: Intent hash to look up
-          example: 0xabc123...
-      required:
-      - intentHash
-    InitiateGaslessIntentV3DTO:
-      type: object
-      properties:
-        intentGroupID:
-          type: string
-          description: Unique identifier of the group of intents being used
-          example: group:01234567-89ab-cdef-0123-456789abcdef
-        dAppID:
-          type: string
-          description: Identifier for the client application initiating the gasless intent
-          example: my-dapp
-        intentEntries:
-          description: Array of intent request entries
-          type: array
-          items:
-            $ref: '#/components/schemas/GaslessIntentRequestIntentEntryDTO'
-        gaslessIntentData:
-          description: Gasless intent configuration containing permit signatures and execution parameters
-          allOf:
-          - $ref: '#/components/schemas/GaslessIntentDataV3DTO'
-      required:
-      - intentGroupID
-      - dAppID
-      - intentEntries
-      - gaslessIntentData
-    GaslessIntentRequestIntentEntryDTO:
-      type: object
-      properties:
-        routeData:
-          description: Route configuration specifying source and destination chains and transfer details
-          allOf:
-          - $ref: '#/components/schemas/RouteDataDTO'
-        rewardData:
-          description: Reward configuration defining tokens and amounts offered to solvers for executing the intent
-          allOf:
-          - $ref: '#/components/schemas/RewardDataDTO'
-        quoteID:
-          type: string
-          description: Unique identifier of the quote being used to initiate the gasless intent
-          example: quote:01234567-89ab-cdef-0123-456789abcdef
-        solverID:
-          type: string
-          description: Address of the solver that provided the quote
-          example: '0x742d35Cc6634C0532925a3b8D56C85e83F9D18Fa'
-        salt:
-          type: string
-      required:
-      - routeData
-      - rewardData
-      - quoteID
-      - solverID
-      - salt
     FeeV3DTO:
       type: object
       properties:
@@ -1228,54 +1200,82 @@ components:
       - description
       - token
       - amount
-    IntentByHashResponseV3DTO:
+    RewardDataDTO:
       type: object
       properties:
-        data:
-          description: Intent activity details
-          allOf:
-          - $ref: '#/components/schemas/IntentActivityV3DTO'
-      required:
-      - data
-    IntentStatusArrayResponseV3DTO:
-      type: object
-      properties:
-        data:
-          description: Array of intent statuses matching the search criteria (with log indexes and timestamps)
+        creator:
+          type: string
+          description: Address of the user creating this intent, this will be the recipient of a refund if the intent expires
+          example: '0x742d35Cc6634C0532925a3b8D56C85e83F9D18Fa'
+        proverContract:
+          type: string
+          description: Address of the prover contract that validates intent execution
+          example: '0x1234567890abcdef1234567890abcdef12345678'
+        deadline:
+          type: string
+          description: Unix timestamp deadline for when this intent expires (in seconds)
+          example: '1699123456'
+        nativeValue:
+          type: string
+          description: Native token amount offered (in wei)
+          example: '0'
+        tokens:
+          description: Array of ERC20 tokens and amounts offered on the origin chain for fulfilling the intent
           type: array
           items:
-            $ref: '#/components/schemas/IntentStatusWithMetadataV3DTO'
+            $ref: '#/components/schemas/TokenAmountDataDTO'
       required:
-      - data
-    SingleResponseV3DTO:
+      - creator
+      - proverContract
+      - deadline
+      - nativeValue
+      - tokens
+    TokenAmountDataDTO:
       type: object
       properties:
-        data:
-          description: Quote response data
-          allOf:
-          - $ref: '#/components/schemas/QuoteResponseV3DTO'
+        token:
+          type: string
+          description: Address of the ERC20 token contract
+          example: '0xA0b86a33E6441446C1c3df4c64B739C7e4a81ec0'
+        amount:
+          type: string
+          description: Token amount in smallest unit (wei for ETH, base units for ERC20 tokens)
+          example: '1000000'
       required:
-      - data
-    GaslessIntentDataV3DTO:
+      - token
+      - amount
+    RouteDataDTO:
       type: object
       properties:
-        permit3:
-          description: Permit3 signature data for multi-chain token approvals
-          allOf:
-          - $ref: '#/components/schemas/Permit3DTO'
-        allowPartial:
-          type: boolean
-          description: Whether to allow partial funding of the intent
-          example: false
-          default: false
+        originChainID:
+          type: string
+          description: Chain ID where the intent originates
+          example: '8453'
+        destinationChainID:
+          type: string
+          description: Chain ID where the intent will be executed
+          example: '10'
+        inboxContract:
+          type: string
+          description: Address of the inbox contract on the destination chain
+          example: '0x123abc456def789012345678901234567890abcd'
+        tokens:
+          description: Array of ERC20 tokens and amounts involved in the destination calls
+          type: array
+          items:
+            $ref: '#/components/schemas/TokenAmountDataDTO'
+        calls:
+          description: Array of contract calls to be executed on the destination chain
+          type: array
+          items:
+            $ref: '#/components/schemas/CallDataDTO'
+        salt:
+          type: string
+          description: Salt for the intent (used when initiating gasless intents or publishing onchain, set to '0x0' for quote requests)
+          example: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef'
       required:
-      - permit3
-    InitiateGaslessIntentResponseV3DTO:
-      type: object
-      properties:
-        data:
-          description: Gasless intent execution response data
-          allOf:
-          - $ref: '#/components/schemas/GaslessIntentExecutionResponseDTO'
-      required:
-      - data
+      - originChainID
+      - destinationChainID
+      - inboxContract
+      - tokens
+      - calls
