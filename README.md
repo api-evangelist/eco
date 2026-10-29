@@ -64,6 +64,114 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Eco is a company surfaced as a portfolio company of a16z, lightspeed-venture-partners, pantera-capital and added to the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+Eco is a developer platform for programmable stablecoin infrastructure — "The Stablecoin Network That Makes Money Programmable." It provides real-time, non-custodial cross-chain stablecoin routing, liquidity, and orchestration across onchain markets through four products: Routes (intent-based cross-chain transfers and swaps fulfilled by competing solvers in 20-40 seconds), Programmable Addresses (deterministic CREATE2 deposit/withdrawal addresses with pre-programmed routing, via Solana Deposit Addresses and Circle Gateway), Programmable Transactions (single-transaction multi-contract "Sauce" execution, beta), and Orchestration (a composition layer over Routes, transactions, and compliance, beta). The Routes REST API exposes quote, intent, and solver operations across V1/V2/V3, requiring no authentication (a dAppID is passed in the request body for attribution). Eco supports 16+ chains and 240+ directional pairs and is used by stablecoin issuers, wallets, exchanges, payment platforms, DeFi protocols, treasury managers, and AI agents.
 
-Backed by: a16z, lightspeed-venture-partners, pantera-capital — https://www.eco.com/
+**Areas:** Company · Stablecoins · Cryptocurrency · Payments · Blockchain · Cross-Chain · DeFi · Web3 · Infrastructure · Financial Services
+
+## Eco on APIs.io
+
+Everything profiled for Eco is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/eco/](https://apis.io/providers/eco/)** — or go straight to one of the APIs or properties below.
+
+### APIs (3)
+
+- [Eco Quotes V1 API](https://apis.io/apis/eco/eco-quotes-v1-api/) — The Quotes V1 API from Eco — 2 operation(s) for quotes v1.
+- [Eco Quotes V2 API](https://apis.io/apis/eco/eco-quotes-v2-api/) — The Quotes V2 API from Eco — 4 operation(s) for quotes v2.
+- [Eco Quotes V3 API](https://apis.io/apis/eco/eco-quotes-v3-api/) — The Quotes V3 API from Eco — 9 operation(s) for quotes v3.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [eco-routes](https://apis.io/servers/eco/eco-routes/)
+
+#### Collections (3)
+
+Postman and Open Collection request collections.
+
+- [Eco Routes Quotes V1 API](https://apis.io/collections/eco/open-eco-quotes-v1-api/)
+- [Eco Routes Quotes V1 Quotes V2 API](https://apis.io/collections/eco/open-eco-quotes-v2-api/)
+- [Eco Routes Quotes V1 Quotes V3 API](https://apis.io/collections/eco/open-eco-quotes-v3-api/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Eco Routes Overlay](https://apis.io/overlays/eco/eco-routes-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Eco Authentication](https://apis.io/security/eco/eco-authentication/)
+- [Eco Domain Security](https://apis.io/security/eco/eco-domain-security/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.eco.com/)
+- [Documentation](https://docs.eco.com)
+- [Getting started](https://docs.eco.com/get-started/quickstart)
+- [API reference](https://docs.eco.com/api-reference/introduction)
+- [Support](https://www.eco.com/contact)
+- [Blog](https://www.eco.com/blog/)
+- [Terms of service](https://www.eco.com/tos)
+- [Privacy policy](https://www.eco.com/privacy-policy)
+- [GitHub](https://github.com/eco)
+
+## API Evangelist rating
+
+**Kin Score 37.9** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 38.8 |
+| Contract governance | 4.5 |
+| Operational transparency | 2.6 |
+| Developer ergonomics | 80.4 |
+| Access clarity | 21.1 |
+
+**Agent readiness 18.8** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | — |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 22.3** — Payments
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/eco/](https://apis.io/providers/eco/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Eco: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/eco/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
